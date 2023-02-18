@@ -1,7 +1,16 @@
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const [currentPrice, setCurrentPrice] = useState(0);
+
+  useEffect(() => {
+    fetch('/coffee').then(res => res.json()).then(data => {
+      setCurrentPrice(data.price);
+    });
+  }, []);
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +26,7 @@ function App() {
         >
           Learn React
         </a>
+        <p>The current price is {currentTime}.</p>
       </header>
     </div>
   );
