@@ -33,7 +33,7 @@ class Coffee:
         Raises:
             -
         """ 
-        return {"Price:": self.price}
+        return self.price
 
     def getPrice_perKilo(self):
         """returns the price per Kilo to compare different beans
