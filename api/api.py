@@ -1,17 +1,24 @@
-import time
-from flask import Flask
+from flask import Flask, request
 from products import Coffee
 
 app = Flask(__name__)
 
-@app.route('/coffee')
-def coffee():
-    testcoffee = Coffee.Coffee("Ethiopia", "Arabica", "Washed", "Light", "Max", price=12)
-    return {'coffee': testcoffee.getPrice()}
+testcoffee = Coffee.Coffee("Ethiopia", "Arabica", "Washed", "Light", farmer="Max", price=12)
 
-'''
-@app.route('/time')
-def get_current_time():
-    return {'time2': time.time()}
-'''
+@app.route('/get_price')
+def get_price():
+    return {'price': testcoffee.price}
 
+@app.route('/post_price', methods=['POST'])
+def receive_price():
+    testcoffee.price = request.json
+    return {'message': 'Price received'}
+
+@app.route('/post_farmer', methods=['POST'])
+def receive_data():
+    testcoffee.farmer = request.json
+    return {'message': 'Data received'}
+
+@app.route('/get_farmer')
+def get_farmer():
+    return {'farmer': testcoffee.farmer}

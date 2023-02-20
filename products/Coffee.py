@@ -21,6 +21,12 @@ class Coffee:
         self.size = size
         self.price = price
     
+    # INFO: wir brauchen in Python keine getter und setter, da es in Python keine private or protected variables gibt.
+    #       der Konsens in Python ist es, achtsamer mit variablen umzugehen
+    #       private variablen würde man mit __var angeben, die sind aber auch mit einem kleinen Umweg von außen zugänglich 
+    #       - daher macht es auch keinen Sinn, getter und setter zu schreiben
+    
+    # getter
     def getPrice(self):
         """Returns the price of the given coffee
 
@@ -52,4 +58,32 @@ class Coffee:
 
         return self.price / (self.size * 0.1)
 
-    
+    def getFarmer(self):
+        """returns the farmer
+
+        Args:
+            self
+
+        Returns:
+            farmer
+
+        Raises:
+            -
+        """
+        return self.farmer
+
+    #setter
+    def setFarmer(self, name):
+        """sets a new farmer name
+
+        Args:
+            self
+            name : the name of the farmer 
+
+        Returns:
+            -
+
+        Raises:
+            -
+        """
+        self.farmer = name
