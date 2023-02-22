@@ -6,7 +6,7 @@ sspLabSweet = Burr.Burr(name='SSP Lab Sweet', type='flat', size=64, price=150)
 
 #Coffees
 testCoffee1 = Coffee.Coffee(origin='Ethiopia', variety='Arabica', process='Washed', roast='Light', farmer='Max', price=12)
-testCoffee2 = Coffee.Coffee(origin='Colombia', variety='Arabica', process='Natural', roast='Light', farmer='Max', price=9)
+testCoffee2 = Coffee.Coffee(origin='Colombia', variety='Arabica', process='Natural', roast='Light', farmer='Max', price=12)
 
 #Grinders
 fellowOde = Grinder.Grinder(name='Fellow ode', burrs=sspRedSpeed, price=350)
