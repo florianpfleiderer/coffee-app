@@ -4,20 +4,25 @@ import './App.css';
 
 
 function App() {
+  //get price
   const [currentPrice, setCurrentPrice] = useState(0);
+  const [currentFarmer, setFarmer] = useState('');
 
   useEffect(() => {
-    fetch('/get_price').then(res => res.json()).then(data => {
+    fetch('/get_coffee').then(res => res.json()).then(data => {
       setCurrentPrice(data.price);
+      setFarmer(data.farmer);
     });
   }, []);
-  
+
   //adds the option to post something to the api with a button
   const [data, setData] = useState('');
 
-  const sendData = () => {
+  function sendData() {
+  
     fetch('/post_price', {
       method: 'POST',
+      mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -27,15 +32,6 @@ function App() {
     .then(data => console.log(data))
     .catch(error => console.error(error));
   }
-
-  //get farmer name
-  const [data1, setData1] = useState('');
-
-  useEffect(() => {
-    fetch('/get_farmer').then(res => res.json()).then(data => {
-      setData1(data.farmer);
-    });
-  }, []);
 
   return (
     <div className="App">
@@ -53,9 +49,9 @@ function App() {
           Learn React
         </a>
         <p>The current price is {currentPrice}.</p>
+        <p>The current farmer is {currentFarmer}.</p>
         <input value={data} onChange={e => setData(e.target.value)} />
         <button onClick={sendData}>Send Data</button>
-        <p>The current farmer is {data1}.</p>
       </header>
     </div>
   );
