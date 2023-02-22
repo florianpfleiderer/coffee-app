@@ -1,18 +1,21 @@
 from flask import Flask, request,jsonify
-from products import Coffee
+from products import Inventory
 
 app = Flask(__name__)
+coffee1 = Inventory.testCoffee1
+coffee2 = Inventory.testCoffee2
 
-testcoffee = Coffee.Coffee(origin="Ethiopia", variety="Arabica", process="Washed", roast="Light", farmer="Max", price=12)
+coffees = {'coffee1': coffee1, 'coffee2': coffee2}
 
 @app.route('/get_coffee')
 def get_coffee():
-    return {'origin': testcoffee.origin, 'farmer': testcoffee.farmer, 'price': testcoffee.price}
+    return {'coffee1': {'origin': coffees['coffee1'].origin, 'farmer': coffees['coffee1'].farmer, 'price': coffees['coffee1'].price},
+            'coffee2': {'origin': coffees['coffee2'].origin, 'farmer': coffees['coffee2'].farmer, 'price': coffees['coffee2'].price}}
 
 @app.route('/post_price', methods=['POST', 'GET'])
 def receive_price():
     if request.method == 'POST':
-        testcoffee.price = request.json['data']
+        coffees['coffee1'].price = request.json['data']
         return {'message': 'Price received'}
     return {'message': 'no price received'}
     
