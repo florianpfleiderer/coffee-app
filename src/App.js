@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-
+import axios from 'axios';
 
 function MainPage() {
   //get price
@@ -89,6 +89,7 @@ function MainPage() {
         <h1>Great Coffee App</h1>
       </header>
       <main>
+        <button>Add Coffee</button>
         {showTable && (
           <table>
             <thead>
