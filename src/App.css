@@ -1,38 +1,92 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #f2f2f2;
+  max-width: 66.67%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: space-between;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+main {
+  /* Add styles to show contents of your backend */
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+/* button section at the bottom */
+button {
+  background-color: #444;
   color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.App-link {
-  color: #61dafb;
+button:nth-of-type(1) {
+  background-color: #555;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button:nth-of-type(2) {
+  background-color: #666;
+}
+
+button:nth-of-type(3) {
+  background-color: #777;
+}
+
+button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+/* Custom styles for button sizes */
+button {
+  width: calc((100% / 3) - 1rem);
+  /* subtract 1rem for spacing */
+  height: 2cm;
+  margin-right: 1rem;
+}
+
+button:last-of-type {
+  margin-right: 0;
+}
+
+/* formats for displaying the products */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 1rem;
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #eee;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+  cursor: pointer;
 }
