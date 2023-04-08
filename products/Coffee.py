@@ -1,3 +1,4 @@
+import json
 class Coffee:
     """represents an Instance of a Coffee Variety 
     
@@ -12,7 +13,8 @@ class Coffee:
             e.g.: 1.6 equals 1€ and 60 cents
     """
 
-    def __init__(self, origin=None, variety=None, process=None, roast=None, farmer=None,size=None, price=None) -> None:
+    def __init__(self, name=None, origin=None, variety=None, process=None, roast=None, farmer=None,size=None, price=None) -> None:
+        self.name = name
         self.origin = origin
         self.variety = variety
         self.process = process
@@ -25,21 +27,6 @@ class Coffee:
     #       der Konsens in Python ist es, achtsamer mit variablen umzugehen
     #       private variablen würde man mit __var angeben, die sind aber auch mit einem kleinen Umweg von außen zugänglich 
     #       - daher macht es auch keinen Sinn, getter und setter zu schreiben
-    
-    # getter
-    def getPrice(self):
-        """Returns the price of the given coffee
-
-        Args:
-            self
-
-        Returns:
-            price
-
-        Raises:
-            -
-        """ 
-        return self.price
 
     def getPrice_perKilo(self):
         """returns the price per Kilo to compare different beans
@@ -58,32 +45,6 @@ class Coffee:
 
         return self.price / (self.size * 0.1)
 
-    def getFarmer(self):
-        """returns the farmer
-
-        Args:
-            self
-
-        Returns:
-            farmer
-
-        Raises:
-            -
-        """
-        return self.farmer
-
-    #setter
-    def setFarmer(self, name):
-        """sets a new farmer name
-
-        Args:
-            self
-            name : the name of the farmer 
-
-        Returns:
-            -
-
-        Raises:
-            -
-        """
-        self.farmer = name
+    def convertToJson(self):
+        my_dict = vars(self)
+        return my_dict

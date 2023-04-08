@@ -11,3 +11,7 @@ class Grinder:
         self.name = name
         self.burrs = burrs
         self.price = price
+
+    def convertToJson(self):
+        my_dict = vars(self)
+        return my_dict

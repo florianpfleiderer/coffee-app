@@ -112,12 +112,32 @@ function CoffeeTable() {
                         <td>{selectedCoffee.name}</td>
                     </tr>
                     <tr>
-                        <th>Price:</th>
-                        <td>{selectedCoffee.price}</td>
+                        <th>Origin:</th>
+                        <td>{selectedCoffee.origin}</td>
+                    </tr>
+                    <tr>
+                        <th>Variety:</th>
+                        <td>{selectedCoffee.variety}</td>
+                    </tr>
+                    <tr>
+                        <th>Process:</th>
+                        <td>{selectedCoffee.process}</td>
+                    </tr>
+                    <tr>
+                        <th>Roast:</th>
+                        <td>{selectedCoffee.roast}</td>
                     </tr>
                     <tr>
                         <th>Farmer:</th>
                         <td>{selectedCoffee.farmer}</td>
+                    </tr>
+                    <tr>
+                        <th>Size:</th>
+                        <td>{selectedCoffee.size}</td>
+                    </tr>
+                    <tr>
+                        <th>Price:</th>
+                        <td>{selectedCoffee.price}</td>
                     </tr>
                 </tbody>
             </table>

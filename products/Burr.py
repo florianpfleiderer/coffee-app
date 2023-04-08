@@ -16,4 +16,8 @@ class Burr:
             self.type = type
         self.size = size
         self.price = price
+
+    def convertToJson(self):
+        my_dict = vars(self)
+        return my_dict
     
