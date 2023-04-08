@@ -13,10 +13,6 @@ header {
   margin-top: 2rem;
 }
 
-main {
-  /* Add styles to show contents of your backend */
-}
-
 footer {
   display: flex;
   justify-content: space-between;
@@ -61,6 +57,46 @@ button {
 }
 
 button:last-of-type {
+  margin-right: 0;
+}
+
+button1 {
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+button1:nth-of-type(1) {
+  background-color: #555;
+}
+
+button1:nth-of-type(2) {
+  background-color: #666;
+}
+
+button1:nth-of-type(3) {
+  background-color: #777;
+}
+
+button1:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+/* Custom styles for button1 sizes */
+button1 {
+  width: calc((100% / 3) - 1rem);
+  /* subtract 1rem for spacing */
+  height: 2cm;
+  margin-right: 1rem;
+}
+
+button1:last-of-type {
   margin-right: 0;
 }
 
