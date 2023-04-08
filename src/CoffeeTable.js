@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddCoffeeForm from './AddCoffeeForm'
+import EditDialog from './EditDialog';
 // import './CoffeeTable.css'
 
 function CoffeeTable() {
@@ -9,6 +10,8 @@ function CoffeeTable() {
     const [showDetail, setShowDetail] = useState(false);
     const [showTable, setShowTable] = useState(true);
     const [selectedCoffee, setSelectedCoffee] = useState(null);
+    const [showEditDialog, setShowEditDialog] = useState(false);
+    const [editAttribute, setEditAttribute] = useState('');
 
     useEffect(() => {
         axios.get('/api/coffees')
@@ -32,15 +35,18 @@ function CoffeeTable() {
         setSelectedCoffee(null);
         setShowDetail(false);
         setShowTable(true);
+    };
 
-        // Fetch inventory data from API to update the table
-        axios.get('/api/coffees')
-            .then(response => {
-                setInventory(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+    const handleEditClick = (attribute) => {
+        setEditAttribute(attribute);
+        setShowEditDialog(true);
+    };
+
+    const handleCloseEditDialog = () => {
+        setShowEditDialog(false);
+        setSelectedCoffee(null);
+        setShowDetail(false);
+        setShowTable(true);
     };
 
     const handleAddCoffee = () => {
@@ -73,6 +79,15 @@ function CoffeeTable() {
 
     // render all the stuff
     const renderTable = () => {
+        // fetch newest data
+        axios.get('/api/coffees')
+            .then(response => {
+                setInventory(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
         return (
             // render the coffee table here
             // add an onClick event handler to each row
@@ -102,12 +117,13 @@ function CoffeeTable() {
         if (!selectedCoffee) {
             return null;
         }
+
         // render the detailed information for the selected coffee here
         // use the selectedCoffee state variable to get the coffee object
         return (
             <table>
                 <tbody>
-                    <tr>
+                    <tr key={selectedCoffee.name} onClick={() => handleEditClick('name')}>
                         <th>Name:</th>
                         <td>{selectedCoffee.name}</td>
                     </tr>
@@ -153,13 +169,22 @@ function CoffeeTable() {
                 </div>
             )
         } else if (showDetail) {
-            return (
-                <div>
-                    {renderDetail(selectedCoffee)}
-                    <button1 onClick={handleDelete}>Delete</button1>
-                    <button1 onClick={handleBackClick}>Back</button1>
-                </div>
-            );
+            if (showEditDialog) {
+                return (
+                    <div>
+                        {showEditDialog && <EditDialog coffee={selectedCoffee} attribute={editAttribute} />}
+                        <button1 onClick={handleCloseEditDialog}>Back</button1>
+                    </div>
+                );
+            } else {
+                return (
+                    <div>
+                        {renderDetail(selectedCoffee)}
+                        <button1 onClick={handleDelete}>Delete</button1>
+                        <button1 onClick={handleBackClick}>Back</button1>
+                    </div>
+                );
+            }
         } else if (showForm) {
             return (
                 <div>
