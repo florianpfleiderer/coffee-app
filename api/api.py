@@ -6,7 +6,11 @@ inventory = []
 inventory.append(Inventory.testCoffee1.convertToJson())
 inventory.append(Inventory.testCoffee2.convertToJson())
 
+grinders = []
+grinders.append(Inventory.fellowOde.convertToJson())
+grinders.append(Inventory.wilfaUniform.convertToJson())
 
+# my Coffee section
 @app.route('/api/coffees', methods=['POST', 'GET'])
 def add_coffee():
     if request.method == 'POST':
@@ -41,3 +45,15 @@ def find_coffee_by_name(name):
         if(inventory[i]['name'] == name):
             return i
     return -1
+
+# brew section
+@app.route('/api/grinders', methods=['POST', 'GET'])
+def add_grinder():
+    if request.method == 'POST':
+        grinder_data = request.get_json()
+        inventory.append(grinder_data)
+        print(grinder_data)
+        return 'Grinder added', 200
+    elif request.method == 'GET':
+        print(grinders)
+        return grinders

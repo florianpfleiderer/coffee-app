@@ -211,7 +211,7 @@ function CoffeeTable() {
         }
     };
 
-    // TODO: Render the table with inventory data
+    // render everything
     return (
         <div>
             {renderContent()}

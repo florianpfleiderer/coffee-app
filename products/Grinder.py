@@ -1,3 +1,6 @@
+import json
+
+# from products import Burr
 class Grinder:
     """represents a Coffee Grinder
 
@@ -7,7 +10,7 @@ class Grinder:
         price(float)
     """ 
 
-    def __init__(self, name=None, burrs=None, price=None):
+    def __init__(self, name, burrs, price):
         self.name = name
         self.burrs = burrs
         self.price = price

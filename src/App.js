@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 import CoffeeTable from './my/CoffeeTable';
+import Brew from './brew/Brew'
 
 function MainPage() {
 
@@ -15,6 +16,12 @@ function MainPage() {
     setShowExplore(false);
   }
 
+  const toggleBrew = () => {
+    setShowBrew(!showBrew);
+    setShowTable(false);
+    setShowExplore(false);
+  }
+
   return (
     <div className="App">
       <header>
@@ -22,10 +29,11 @@ function MainPage() {
       </header>
       <main>
         {showTable && <CoffeeTable />}
+        {showBrew && <Brew />}
       </main>
       <footer>
         <button>Explore</button>
-        <button>Brew</button>
+        <button onClick={toggleBrew}>Brew</button>
         <button onClick={toggleTable}>My Coffee</button>
       </footer>
     </div>
