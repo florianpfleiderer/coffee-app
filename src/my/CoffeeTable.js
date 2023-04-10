@@ -23,7 +23,7 @@ function CoffeeTable() {
             });
     }, []);
 
-    // handle Clicks
+    // handle Clicks / opening windows
     const handleRowClick = (coffee) => {
         setSelectedCoffee(coffee);
         setShowForm(false);
@@ -31,6 +31,18 @@ function CoffeeTable() {
         setShowDetail(true);
     };
 
+    const handleEditClick = (attribute) => {
+        setEditAttribute(attribute);
+        setShowEditDialog(true);
+    };
+
+    const handleAddCoffee = () => {
+        setShowForm(true);
+        setShowTable(false);
+        setShowDetail(false);
+    };
+
+    // closing windows / back clicks
     const handleBackClick = () => {
         axios.get('/api/coffees')
             .then(response => {
@@ -44,22 +56,18 @@ function CoffeeTable() {
         setShowTable(true);
     };
 
-    const handleEditClick = (attribute) => {
-        setEditAttribute(attribute);
-        setShowEditDialog(true);
-    };
-
     const handleCloseEditDialog = () => {
+        axios.get('/api/coffees')
+            .then(response => {
+                setInventory(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
         setShowEditDialog(false);
         setSelectedCoffee(null);
         setShowDetail(false);
         setShowTable(true);
-    };
-
-    const handleAddCoffee = () => {
-        setShowForm(true);
-        setShowTable(false);
-        setShowDetail(false);
     };
 
     const handleDelete = () => {
@@ -82,6 +90,16 @@ function CoffeeTable() {
                 console.error(error);
                 alert("Failed to delete coffee.");
             });
+        axios.get('/api/coffees')
+            .then(response => {
+                setInventory(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        setSelectedCoffee(null);
+        setShowDetail(false);
+        setShowTable(true);
     };
 
     // render all the stuff
@@ -125,31 +143,31 @@ function CoffeeTable() {
                         <th>Name:</th>
                         <td>{selectedCoffee.name}</td>
                     </tr>
-                    <tr>
+                    <tr key={selectedCoffee.origin} onClick={() => handleEditClick('origin')}>
                         <th>Origin:</th>
                         <td>{selectedCoffee.origin}</td>
                     </tr>
-                    <tr>
+                    <tr key={selectedCoffee.variety} onClick={() => handleEditClick('variety')}>
                         <th>Variety:</th>
                         <td>{selectedCoffee.variety}</td>
                     </tr>
-                    <tr>
+                    <tr key={selectedCoffee.process} onClick={() => handleEditClick('process')}>
                         <th>Process:</th>
                         <td>{selectedCoffee.process}</td>
                     </tr>
-                    <tr>
+                    <tr key={selectedCoffee.roast} onClick={() => handleEditClick('roast')}>
                         <th>Roast:</th>
                         <td>{selectedCoffee.roast}</td>
                     </tr>
-                    <tr>
+                    <tr key={selectedCoffee.farmer} onClick={() => handleEditClick('farmer')}>
                         <th>Farmer:</th>
                         <td>{selectedCoffee.farmer}</td>
                     </tr>
-                    <tr>
+                    <tr key={selectedCoffee.size} onClick={() => handleEditClick('size')}>
                         <th>Size:</th>
                         <td>{selectedCoffee.size}</td>
                     </tr>
-                    <tr>
+                    <tr key={selectedCoffee.price} onClick={() => handleEditClick('price')}>
                         <th>Price:</th>
                         <td>{selectedCoffee.price}</td>
                     </tr>
