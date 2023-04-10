@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import './App.css';
 
-import CoffeeTable from './CoffeeTable';
+import CoffeeTable from './my/CoffeeTable';
 
 function MainPage() {
 
   const [showTable, setShowTable] = useState(false);
+  const [showBrew, setShowBrew] = useState(false);
+  const [showExplore, setShowExplore] = useState(false);
 
   const toggleTable = () => {
     setShowTable(!showTable);
+    setShowBrew(false);
+    setShowExplore(false);
   }
 
   return (

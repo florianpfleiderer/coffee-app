@@ -32,6 +32,13 @@ function CoffeeTable() {
     };
 
     const handleBackClick = () => {
+        axios.get('/api/coffees')
+            .then(response => {
+                setInventory(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
         setSelectedCoffee(null);
         setShowDetail(false);
         setShowTable(true);
@@ -79,15 +86,6 @@ function CoffeeTable() {
 
     // render all the stuff
     const renderTable = () => {
-        // fetch newest data
-        axios.get('/api/coffees')
-            .then(response => {
-                setInventory(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
         return (
             // render the coffee table here
             // add an onClick event handler to each row
