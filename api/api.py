@@ -1,6 +1,14 @@
 from flask import Flask, request, jsonify
 from products import inventory as inv 
 from products import inventoryObjects
+import logging
+
+# logger 
+level = logging.DEBUG
+format = '[%(levelname)s] %(asctime)s %(name)s: %(message)s'
+# handlers = [logging.StreamHandler()]
+logging.basicConfig(level=level, format=format) #, handlers=handlers)
+# logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 inventory = []
@@ -17,10 +25,10 @@ def add_coffee():
     if request.method == 'POST':
         coffee_data = request.get_json()
         inventory.append(inventoryObjects.Coffee.fromJson(coffee_data))
-        print(f'type {type(inventoryObjects.Coffee.fromJson(coffee_data)).__name__} added')
+        logging.debug(f'type {type(inventoryObjects.Coffee.fromJson(coffee_data)).__name__} added')
         return 'Coffee added', 200
     elif request.method == 'GET':
-        # print([ob.convertToJson() for ob in inventory])
+        # logging.debug([ob.convertToJson() for ob in inventory])
         return [ob.convertToJson() for ob in inventory], 200
 
 
@@ -29,7 +37,7 @@ def delete_coffee(coffee_name):
     global inventory
     inventory = [
         coffee for coffee in inventory if coffee.name != coffee_name]
-    print(f'coffee {coffee_name} deleted')
+    logging.debug(f'coffee {coffee_name} deleted')
     return jsonify({"message": "Coffee {coffee_name} deleted successfully."}), 200
 
 
@@ -37,16 +45,14 @@ def delete_coffee(coffee_name):
 def update_coffee(coffee_name):
     coffee_index = find_coffee_by_name(coffee_name)
     newCoffee = request.get_json()
-    print(f'updated Coffee = {newCoffee}')
+    logging.debug(f'updated Coffee = {newCoffee}')
     inventory[coffee_index] = inventoryObjects.Coffee.fromJson(newCoffee)
     return jsonify({"message": "Coffee updated successfully."}), 200
 
-
 def find_coffee_by_name(name):
-    for c in inventory:
-        if(c.name == name):
-            return inventory.index(c)
-    return -1
+    for i, c in enumerate(inventory):
+        return i if(c.name is name) else -1
+
 
 # brew section
 @app.route('/api/grinders', methods=['POST', 'GET'])
@@ -54,9 +60,9 @@ def add_grinder():
     if request.method == 'POST':
         grinder_data = request.get_json()
         inventory.append(inventoryObjects.Grinder.fromJson(grinder_data))
-        print(f'type {type(inventoryObjects.Grinder.fromJson(grinder_data)).__name__} added')
+        logging.debug(f'type {type(inventoryObjects.Grinder.fromJson(grinder_data)).__name__} added')
         return 'Grinder added', 200
     elif request.method == 'GET':
-        print(grinders)
+        logging.debug(grinders)
         return [ob.convertToJson() for ob in grinders], 200
     
