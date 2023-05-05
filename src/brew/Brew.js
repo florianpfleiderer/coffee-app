@@ -13,7 +13,11 @@ function Brew() {
     const [showBrewGuide, setshowBrewGuide] = useState(false);
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
-    const [maxTime, setMaxTime] = useState(210); // Default max time of 3 minutes 30seconds
+    const [totalTime, setTotalTime] = useState(0); // Maximum time in seconds
+    const [Pour1stTime, set1stPourTime] = useState(0); // Time for the first pour
+    const [Pour2ndTime, set2ndPourTime] = useState(0); // Time for the second pour
+    const [is1stPourDone, setIs1stPourDone] = useState(false); // Boolean to check if the first pour is done
+    const [is2ndPourDone, setIs2ndPourDone] = useState(false); // Boolean to check if the second pour is done
     const [isTimeUp, setIsTimeUp] = useState(false);
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
@@ -39,19 +43,32 @@ function Brew() {
             });
     }, []);
 
+    //Timer
     useEffect(() => {
         let interval;
     
-        if (isRunning) {
+        if (isRunning && time < totalTime) { // Stop the timer when the maximum time is reached
           interval = setInterval(() => {
             setTime(prevTime => prevTime + 1);
           }, 1000);
+          if(time === Pour1stTime) {
+            setIs1stPourDone(true);
+          }
+          if(time === Pour1stTime + 5) {
+            setIs1stPourDone(false);
+          }
+          if(time === Pour2ndTime) {
+            setIs2ndPourDone(true);
+          }
+          if(time === Pour2ndTime + 5) {
+            setIs2ndPourDone(false);
+          }
         } else {
           clearInterval(interval);
+          setIsTimeUp(true);
         }
-    
         return () => clearInterval(interval);
-      }, [isRunning]);
+    }, [isRunning, time, totalTime]);
 
     const handleGrinderRowClick = (grinder) => {
         setSelectedGrinder(grinder);
@@ -90,33 +107,45 @@ function Brew() {
 
     const handleStart = () => {
         setIsRunning(true);
+        setIsTimeUp(false);
+        setIs1stPourDone(false);
+        setIs2ndPourDone(false);
       };
     
-    const handleStop = () => {
+      const handleStop = () => {
         setIsRunning(false);
       };
     
-    const handleReset = () => {
+      const handleReset = () => {
         setTime(0);
         setIsRunning(false);
+        setIsTimeUp(false);
+        setIs1stPourDone(false);
+        setIs2ndPourDone(false);
       };
     
-    const handleSave = () => {
-        axios.post('/save-time', { time })
-          .then(response => {
-            console.log(response.data);
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      };
-
-    const handleMaxTimeChange = (event) => {
-        setMaxTime(Number(event.target.value));
+      const handleTotalTimeChange = (event) => {
+        setTotalTime(Number(event.target.value));
         setTime(0);
         setIsRunning(false);
+        setIsTimeUp(false);
+        setIs1stPourDone(false);
+        setIs2ndPourDone(false);
       };
 
+      const handle1stTimeChange = (event) => {
+        set1stPourTime(Number(event.target.value));
+        setTime(0);
+        setIsRunning(false);
+        setIsTimeUp(false);
+      };
+
+      const handle2ndTimeChange = (event) => {
+        set2ndPourTime(Number(event.target.value));
+        setTime(0);
+        setIsRunning(false);
+        setIsTimeUp(false);
+      };
     
     // render all the stuff
     // render the grinder selection
@@ -190,42 +219,56 @@ function Brew() {
                     <h2>Brew Guide:</h2>
                 </header>
                 <div className="BrewGuideContent">
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div className="BrewGuideContentLeft">
-                        <h3>Grinder:</h3>
-                        <p>{selectedGrinder.name}</p>
-                        <h3>Coffee:</h3>
-                        <p>{selectedCoffee.name}</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div></div>
+                        <div>
+                            <h3>Grinder:</h3>
+                            <p>{selectedGrinder.name}</p>
+                            <h3>Coffee:</h3>
+                            <p>{selectedCoffee.name}</p>
+                        </div>
+                        <div>
+                            <h3>Ratio:</h3>
+                            <p>1:16</p>
+                            <h3>Water:</h3>
+                            <p>300g</p>
+                        </div>
+                        <div>
+                            <h3>Time:</h3>
+                            <p>{totalTime}</p>
+                        </div>
+                        </div><div />
+                    <div className="Timer">
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <div></div>
+                            <div>
+                                <h1 style={{ fontSize: '40px' }}>{minutes}:{seconds < 10 ? '0' : ''}{seconds}</h1>
+                                {isTimeUp && <p>Enjoy your coffee!</p>}
+                                {is1stPourDone && <p>End of 1st Pour</p>}
+                                {is2ndPourDone && <p>End of 2nd Pour</p>}
+                            </div>
+                            <div>
+                                <button onClick={handleStart}>Start</button>
+                                <button onClick={handleStop}>Stop</button>
+                                <button onClick={handleReset}>Reset</button>
+                            </div>
+                            <div>
+                                <label htmlFor="total-time-input">Total Time (seconds):</label>
+                                <input type="number" id="total-time-input" value={totalTime} onChange={handleTotalTimeChange} />
+                            </div>
+                            <div>
+                                <label htmlFor="1st-time-input">1st Pour (seconds):</label>
+                                <input type="number" id="1st-time-input" value={Pour1stTime} onChange={handle1stTimeChange} />
+                            </div>
+                            <div>
+                                <label htmlFor="2nd-time-input">2nd Pour (seconds):</label>
+                                <input type="number" id="2nd-time-input" value={Pour2ndTime} onChange={handle2ndTimeChange} />
+                            </div>
+                        </div>
+
                     </div>
-                    <div className="BrewGuideContentLeft">
-                        <h3>Ratio:</h3>
-                        <p>1:16</p>
-                        <h3>Water:</h3>
-                        <p>300g</p>
-                        <h3>Time:</h3>
-                        <p>3:00</p>
-                    </div>
+                    <button onClick={handleBackClick}>Back</button>
                 </div>
-                <div/>
-                <div className="Timer">
-                <h1 style={{ fontSize: '72px' }}>{minutes}:{seconds < 10 ? '0' : ''}{seconds}</h1>
-            {isTimeUp && <p>Time is up!</p>}
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>
-          <button onClick={handleStart}>Start</button>
-          <button onClick={handleStop}>Stop</button>
-          <button onClick={handleReset}>Reset</button>
-        </div>
-        <div>
-          <label htmlFor="max-time-input">Max Time (seconds):</label>
-          <input type="number" id="max-time-input" value={maxTime} onChange={handleMaxTimeChange} />
-          <button onClick={handleSave}>Save</button>
-        </div>
-      </div>
-                
-            </div>
-                <button onClick={handleBackClick}>Back</button>
-            </div>
 
 
 
@@ -244,7 +287,7 @@ function Brew() {
         </div>
 
     );
-
+    
 }
 
 export default Brew;
