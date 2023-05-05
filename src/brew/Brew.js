@@ -190,11 +190,14 @@ function Brew() {
                     <h2>Brew Guide:</h2>
                 </header>
                 <div className="BrewGuideContent">
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div className="BrewGuideContentLeft">
                         <h3>Grinder:</h3>
                         <p>{selectedGrinder.name}</p>
                         <h3>Coffee:</h3>
                         <p>{selectedCoffee.name}</p>
+                    </div>
+                    <div className="BrewGuideContentLeft">
                         <h3>Ratio:</h3>
                         <p>1:16</p>
                         <h3>Water:</h3>
@@ -202,17 +205,8 @@ function Brew() {
                         <h3>Time:</h3>
                         <p>3:00</p>
                     </div>
-                    <div className="BrewGuideContentRight">
-                        <h3>Steps:</h3>
-                        <p>1. Grind {selectedCoffee.name} on {selectedGrinder.name}</p>
-                        <p>2. Start the timer and Bloom with 50g of water</p>
-                        <p>3. Pour 250g of water</p>
-                        <p>4. Wait until 2:00</p>
-                        <p>5. Pour 250g of water</p>
-                        <p>6. Wait until 3:00</p>
-                        <p>7. Enjoy!</p>
-                    </div>
                 </div>
+                <div/>
                 <div className="Timer">
                 <h1 style={{ fontSize: '72px' }}>{minutes}:{seconds < 10 ? '0' : ''}{seconds}</h1>
             {isTimeUp && <p>Time is up!</p>}
@@ -233,6 +227,9 @@ function Brew() {
                 <button onClick={handleBackClick}>Back</button>
             </div>
 
+
+
+            </div>
         );
     };
 
