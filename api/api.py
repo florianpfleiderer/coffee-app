@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from products import inventory as inv 
-from products import inventoryObjects
+from products import Inventory as inv 
+from products import InventoryObjects
 import logging
 
 # logger 
@@ -24,8 +24,8 @@ grinders.append(inv.wilfaUniform)
 def add_coffee():
     if request.method == 'POST':
         coffee_data = request.get_json()
-        inventory.append(inventoryObjects.Coffee.fromJson(coffee_data))
-        logging.debug(f'type {type(inventoryObjects.Coffee.fromJson(coffee_data)).__name__} added')
+        inventory.append(InventoryObjects.Coffee.fromJson(coffee_data))
+        logging.debug(f'type {type(InventoryObjects.Coffee.fromJson(coffee_data)).__name__} added')
         return 'Coffee added', 200
     elif request.method == 'GET':
         # logging.debug([ob.convertToJson() for ob in inventory])
@@ -46,7 +46,7 @@ def update_coffee(coffee_name):
     coffee_index = find_coffee_by_name(coffee_name)
     newCoffee = request.get_json()
     logging.debug(f'updated Coffee = {newCoffee}')
-    inventory[coffee_index] = inventoryObjects.Coffee.fromJson(newCoffee)
+    inventory[coffee_index] = InventoryObjects.Coffee.fromJson(newCoffee)
     return jsonify({"message": "Coffee updated successfully."}), 200
 
 def find_coffee_by_name(name):
@@ -59,8 +59,8 @@ def find_coffee_by_name(name):
 def add_grinder():
     if request.method == 'POST':
         grinder_data = request.get_json()
-        inventory.append(inventoryObjects.Grinder.fromJson(grinder_data))
-        logging.debug(f'type {type(inventoryObjects.Grinder.fromJson(grinder_data)).__name__} added')
+        inventory.append(InventoryObjects.Grinder.fromJson(grinder_data))
+        logging.debug(f'type {type(InventoryObjects.Grinder.fromJson(grinder_data)).__name__} added')
         return 'Grinder added', 200
     elif request.method == 'GET':
         logging.debug(grinders)
