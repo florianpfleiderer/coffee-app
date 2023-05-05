@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { render } from '@testing-library/react';
-
+import './Brew.css';
 
 function Brew() {
     const [inventoryGrinders, setInventoryGrinders] = useState([]);
@@ -214,67 +214,80 @@ function Brew() {
     //renders the timer implemented in the Timer.js file
     const renderBrewGuide = () => {
         return (
-            <div className="BrewGuide">
-                <header>
-                    <h2>Brew Guide:</h2>
-                </header>
-                <div className="BrewGuideContent">
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div></div>
-                        <div>
-                            <h3>Grinder:</h3>
-                            <p>{selectedGrinder.name}</p>
-                            <h3>Coffee:</h3>
-                            <p>{selectedCoffee.name}</p>
-                        </div>
-                        <div>
-                            <h3>Ratio:</h3>
-                            <p>1:16</p>
-                            <h3>Water:</h3>
-                            <p>300g</p>
-                        </div>
-                        <div>
-                            <h3>Time:</h3>
-                            <p>{totalTime}</p>
-                        </div>
-                        </div><div />
-                    <div className="Timer">
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <div></div>
-                            <div>
-                                <h1 style={{ fontSize: '40px' }}>{minutes}:{seconds < 10 ? '0' : ''}{seconds}</h1>
-                                {isTimeUp && <p>Enjoy your coffee!</p>}
-                                {is1stPourDone && <p>End of 1st Pour</p>}
-                                {is2ndPourDone && <p>End of 2nd Pour</p>}
-                            </div>
-                            <div>
-                                <button onClick={handleStart}>Start</button>
-                                <button onClick={handleStop}>Stop</button>
-                                <button onClick={handleReset}>Reset</button>
-                            </div>
-                            <div>
-                                <label htmlFor="total-time-input">Total Time (seconds):</label>
-                                <input type="number" id="total-time-input" value={totalTime} onChange={handleTotalTimeChange} />
-                            </div>
-                            <div>
-                                <label htmlFor="1st-time-input">1st Pour (seconds):</label>
-                                <input type="number" id="1st-time-input" value={Pour1stTime} onChange={handle1stTimeChange} />
-                            </div>
-                            <div>
-                                <label htmlFor="2nd-time-input">2nd Pour (seconds):</label>
-                                <input type="number" id="2nd-time-input" value={Pour2ndTime} onChange={handle2ndTimeChange} />
-                            </div>
-                        </div>
+          <div className="BrewGuide">
+            <header>
+              <h2>Brew Guide:</h2>
+            </header>
 
-                    </div>
-                    <button onClick={handleBackClick}>Back</button>
+            <table>
+                <tbody>
+                    <tr key={selectedGrinder.name}>
+                        <th>Grinder:</th>
+                        <td>{selectedGrinder.name}</td>
+                    </tr>
+                    <tr key={selectedCoffee.name}>
+                        <th>Coffee:</th>
+                        <td>{selectedCoffee.name}</td>
+                    </tr>
+                    <tr>
+                        <th>Ratio:</th>
+                        <td>1:16</td>
+                    </tr>
+                    <tr>
+                        <th>Water:</th>
+                        <td>300g</td>
+                    </tr>
+                    <tr key={totalTime}>
+                        <th>Total time:</th>
+                        <td>{totalTime}</td>
+                    </tr>
+                    <tr key={Pour1stTime}>
+                        <th>1st Pour:</th>
+                        <td>{Pour1stTime}</td>
+                    </tr>
+                    <tr key={Pour2ndTime}>
+                        <th>2nd Pour:</th>
+                        <td>{Pour2ndTime}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+              <div className="Timer">
+                <div className="TimerRow">
+                  <div></div>
+                  <div className="TimerItem">
+                    <h1 style={{ fontSize: '40px' }}>
+                      {minutes}:{seconds < 10 ? '0' : ''}{seconds}
+                    </h1>
+                    {isTimeUp && <p>Enjoy your coffee!</p>}
+                    {is1stPourDone && <p>End of 1st Pour</p>}
+                    {is2ndPourDone && <p>End of 2nd Pour</p>}
+                  </div>
+                  <div className="TimerItem">
+                    <label htmlFor="total-time-input">Total Time (seconds):</label>
+                    <input type="number" id="total-time-input" value={totalTime} onChange={handleTotalTimeChange} />
+                  </div>
+                  <div className="TimerItem">
+                    <label htmlFor="1st-time-input">1st Pour (seconds):</label>
+                    <input type="number" id="1st-time-input" value={Pour1stTime} onChange={handle1stTimeChange} />
+                  </div>
+                  <div className="TimerItem">
+                    <label htmlFor="2nd-time-input">2nd Pour (seconds):</label>
+                    <input type="number" id="2nd-time-input" value={Pour2ndTime} onChange={handle2ndTimeChange} />
+                  </div>
+                  <buttonrow className="TimerItem">
+                    <button1 onClick={handleStart}>Start</button1>
+                    <button1 onClick={handleStop}>Stop</button1>
+                    <button1 onClick={handleReset}>Reset</button1>
+                  </buttonrow>
+                  
                 </div>
-
-
-
+              </div>
+              <button onClick={handleBackClick}>Back</button>
             </div>
+          </div>
         );
-    };
+      };
 
 
 

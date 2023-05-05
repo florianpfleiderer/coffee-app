@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddCoffeeForm from './AddCoffeeForm'
 import EditDialog from './EditDialog';
-// import './CoffeeTable.css'
+import './CoffeeTable.css'
 
 function CoffeeTable() {
     const [inventory, setInventory] = useState([]);
