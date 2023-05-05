@@ -189,7 +189,7 @@ function CoffeeTable() {
                 return (
                     <div>
                         {showEditDialog && <EditDialog coffee={selectedCoffee} attribute={editAttribute} />}
-                        <button1 onClick={handleCloseEditDialog}>Back</button1>
+                        <button class="back" onClick={handleCloseEditDialog}><span>Back</span></button>
                     </div>
                 );
             } else {
@@ -197,7 +197,7 @@ function CoffeeTable() {
                     <div>
                         {renderDetail(selectedCoffee)}
                         <button1 onClick={handleDelete}>Delete</button1>
-                        <button1 onClick={handleBackClick}>Back</button1>
+                        <button class="back" onClick={handleBackClick}><span>Back</span></button>
                     </div>
                 );
             }
@@ -205,7 +205,7 @@ function CoffeeTable() {
             return (
                 <div>
                     {showForm && <AddCoffeeForm />}
-                    <button1 onClick={handleBackClick}>Back</button1>
+                    <button class="back" onClick={handleBackClick}><span>Back</span></button>
                 </div>
             );
         }
