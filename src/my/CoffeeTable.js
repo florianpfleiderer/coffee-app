@@ -181,7 +181,7 @@ function CoffeeTable() {
             return (
                 <div>
                     {renderTable()}
-                    <button1 onClick={handleAddCoffee}>Add Coffee</button1>
+                    <button class="button1" onClick={handleAddCoffee}>Add Coffee</button>
                 </div>
             )
         } else if (showDetail) {
@@ -196,7 +196,7 @@ function CoffeeTable() {
                 return (
                     <div>
                         {renderDetail(selectedCoffee)}
-                        <button1 onClick={handleDelete}>Delete</button1>
+                        <button class="button1" onClick={handleDelete}>Delete</button>
                         <button class="back" onClick={handleBackClick}><span>Back</span></button>
                     </div>
                 );

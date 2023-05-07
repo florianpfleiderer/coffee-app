@@ -285,7 +285,7 @@ function Brew() {
                 <brewButton onClick={handleReset}>Reset</brewButton>
               </buttonRow>
               <div>
-                <button onClick={handleBackClick}>Back</button>
+                <button class="back" onClick={handleBackClick}>Back</button>
               </div>
             </div>
           </div>
