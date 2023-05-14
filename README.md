@@ -4,6 +4,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 The Axios Library is used for API Requests.
 We are using the yarn package manager (-> please don't run any npm or other package manager commands)
 
+## Flask
+Please initiate virtual environment with the name 'venv' to use yarn start-api.
+'''cd api'''
+'''python3 -m venv venv'''
+
+Please run (to install all requirements in your virtual environment):
+'''pip install -r requirements.txt'''
+
+
 ## installing Librarys
 ```
 yarn add <name>
