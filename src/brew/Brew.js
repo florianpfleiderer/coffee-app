@@ -6,10 +6,13 @@ import './Brew.css';
 function Brew() {
     const [inventoryGrinders, setInventoryGrinders] = useState([]);
     const [inventoryCoffees, setInventoryCoffees] = useState([]);
+    const [inventoryRecipes, setInventoryRecipes] = useState([]);
     const [selectedGrinder, setSelectedGrinder] = useState(null);
     const [selectedCoffee, setSelectedCoffee] = useState(null);
-    const [showGrinderSelection, setshowGrinderSelection] = useState(true);
+    const [selectedRecipe, setSelectedRecipe] = useState(null);
+    const [showGrinderSelection, setshowGrinderSelection] = useState(false);
     const [showCoffeSelection, setshowCoffeSelection] = useState(false);
+    const [showRecipeSelection, setshowRecipeSelection] = useState(true);
     const [showBrewGuide, setshowBrewGuide] = useState(false);
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
@@ -21,6 +24,12 @@ function Brew() {
     const [isTimeUp, setIsTimeUp] = useState(false);
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
+    const [totalTimeInput, setTotalTimeInput] = useState("");
+    const [Pour1stTimeInput, set1stPourTimeInput] = useState("");
+    const [Pour2ndTimeInput, set2ndPourTimeInput] = useState("");
+    const [WaterInput, setWaterInput] = useState("");
+
+
     
 
     useEffect(() => {
@@ -42,6 +51,17 @@ function Brew() {
                 console.error(error);
             });
     }, []);
+
+    useEffect(() => {
+        axios.get('/api/recipes')
+            .then(response => {
+                setInventoryRecipes(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
+
 
     //Timer
     useEffect(() => {
@@ -63,24 +83,49 @@ function Brew() {
           if(time === Pour2ndTime + 5) {
             setIs2ndPourDone(false);
           }
+          if(time === totalTime) {
+            setIsTimeUp(true);
+          }
         } else {
           clearInterval(interval);
-          setIsTimeUp(true);
         }
         return () => clearInterval(interval);
-    }, [isRunning, time, totalTime]);
+    }, [isRunning, time, totalTime, Pour1stTime, Pour2ndTime]);
 
-    const handleGrinderRowClick = (grinder) => {
-        setSelectedGrinder(grinder);
-        setshowGrinderSelection(false);
-        setshowCoffeSelection(true);
-    }
-
-    const handleCoffeeRowClick = (coffee) => {
-        setSelectedCoffee(coffee);
+     //if choose BrewGuide
+    const handleRecipeRowClick = (recipe) => {
+        setSelectedRecipe(recipe);
+        setSelectedGrinder(recipe.grinder);
+        setSelectedCoffee(recipe.coffee);
+        setWaterInput(recipe.water);
+        setTotalTimeInput(recipe.totalTime);
+        set1stPourTimeInput(recipe.Pour1stTime);
+        set2ndPourTimeInput(recipe.Pour2ndTime);
         setshowCoffeSelection(false);
+        setshowGrinderSelection(false);
+        setshowRecipeSelection(false);
         setshowBrewGuide(true);
     }
+      //choose Grinder    
+      const handleGrinderRowClick = (grinder) => {
+          setSelectedGrinder(grinder);
+          setshowGrinderSelection(false);
+          setshowRecipeSelection(false);
+          setshowBrewGuide(false);
+          setshowCoffeSelection(true);
+      }
+      //choose Coffee
+      const handleCoffeeRowClick = (coffee) => {
+          setSelectedCoffee(coffee);
+          setshowCoffeSelection(false);
+          setshowRecipeSelection(false);
+          setshowGrinderSelection(false);
+          setshowBrewGuide(true);
+      }
+
+   
+    
+
 
     const handleBackClick = () => {
         axios.get('/api/grinders')
@@ -98,11 +143,27 @@ function Brew() {
             .catch(error => {
                 console.error(error);
             });
-        setSelectedCoffee(null);
-        setSelectedGrinder(null);
+
+        axios.get('/api/recipes')
+            .then(response => {
+                setInventoryRecipes(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+          
+        setSelectedCoffee("Choose a Coffee");
+        setSelectedGrinder("Choose a Grinder");
+        setSelectedRecipe(null);
         setshowBrewGuide(false);
         setshowCoffeSelection(false);
-        setshowGrinderSelection(true);
+        setshowGrinderSelection(false);
+        setshowRecipeSelection(true);
+        setTime(0);
+        setIsRunning(false);
+        setIsTimeUp(false);
+        setIs1stPourDone(false);
+        setIs2ndPourDone(false);
     };
 
     const handleStart = () => {
@@ -133,6 +194,48 @@ function Brew() {
         setIs2ndPourDone(false);
       };
 
+      const handleTotalTimeSubmit = (e) => {
+        e.preventDefault();
+        setTotalTime(parseInt(totalTimeInput));
+        setTime(0);
+        setIsRunning(false);
+        setIsTimeUp(false);
+        setIs1stPourDone(false);
+        setIs2ndPourDone(false);
+      };
+      
+
+      const handle1stTimeSubmit = (e) => {
+        e.preventDefault();
+        set1stPourTime(parseInt(Pour1stTimeInput));
+        setTime(0);
+        setIsRunning(false);
+        setIsTimeUp(false);
+        setIs1stPourDone(false);
+        setIs2ndPourDone(false);
+      };
+
+        const handle2ndTimeSubmit = (e) => {
+        e.preventDefault();
+        set2ndPourTime(parseInt(Pour2ndTimeInput));
+        setTime(0);
+        setIsRunning(false);
+        setIsTimeUp(false);
+        setIs1stPourDone(false);
+        setIs2ndPourDone(false);
+        };
+
+        const handleWaterSubmit = (e) => {
+        e.preventDefault();
+        setWaterInput(parseInt(WaterInput));
+        };
+
+
+
+
+
+
+
       const handle1stTimeChange = (event) => {
         set1stPourTime(Number(event.target.value));
         setTime(0);
@@ -146,6 +249,8 @@ function Brew() {
         setIsRunning(false);
         setIsTimeUp(false);
       };
+
+
     
     // render all the stuff
     // render the grinder selection
@@ -196,6 +301,7 @@ function Brew() {
                             <th>Name</th>
                             <th>Burrs</th>
                             <th>Price</th>
+                            <th>Farmer</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -211,7 +317,54 @@ function Brew() {
             </div>
         );
     };
+
+
+    // render recipe selection
+    const renderRecipeSelection = () => {
+        return (
+            // render the grinder table here
+            // add an onClick event handler to each row
+            // call handleRowClick with the clicked coffee object
+            <div className="RecipeSelection">
+                <header>
+                    <h2>Choose Recipe:</h2>
+                </header>
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Grinder</th>
+                            <th>Coffee</th>
+                            <th>Ratio</th>
+                            <th>Water</th>
+                            <th>Total Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {inventoryRecipes.map((recipe) => (
+                            <tr key={recipe.name} onClick={() => handleRecipeRowClick(recipe)}>
+                                <td>{recipe.name}</td>
+                                <td>{recipe.grinder}</td>
+                                <td>{recipe.coffee}</td>
+                                <td>{recipe.ratio}</td>
+                                <td>{recipe.water}</td>
+                                <td>{recipe.totalTime}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    };
+
+
+
+
+
     //renders the timer implemented in the Timer.js file
+    //lets me choose a cooffee, grinder
     const renderBrewGuide = () => {
         return (
           <div className="BrewGuide">
@@ -223,31 +376,75 @@ function Brew() {
                 <tbody>
                     <tr key={selectedGrinder.name}>
                         <th>Grinder:</th>
-                        <td>{selectedGrinder.name}</td>
+                        <td>{selectedGrinder}</td>
                     </tr>
                     <tr key={selectedCoffee.name}>
                         <th>Coffee:</th>
-                        <td>{selectedCoffee.name}</td>
+                        <td>{selectedCoffee}</td>
                     </tr>
                     <tr>
                         <th>Ratio:</th>
-                        <td>1:16</td>
+                        <td>{selectedRecipe.ratio}</td>
                     </tr>
-                    <tr>
+                    <tr key={selectedRecipe.water}>
                         <th>Water:</th>
-                        <td>300g</td>
+                        <td>
+                            <form onSubmit={handleWaterSubmit}>
+                                <label>
+                                <input
+                                    type="text"
+                                    value={WaterInput}
+                                    onChange={(e) => setWaterInput(e.target.value)}
+                                />
+                                </label>
+                                <input type="submit" value="Update" />
+                            </form>
+                        </td>
                     </tr>
                     <tr key={totalTime}>
                         <th>Total time:</th>
-                        <td>{totalTime}</td>
+                        <td>
+                            <form onSubmit={handleTotalTimeSubmit}>
+                                <label>
+                                <input
+                                    type="text"
+                                    value={totalTimeInput}
+                                    onChange={(e) => setTotalTimeInput(e.target.value)}
+                                />
+                                </label>
+                                <input type="submit" value="Update" />
+                            </form>
+                        </td>
                     </tr>
                     <tr key={Pour1stTime}>
                         <th>1st Pour:</th>
-                        <td>{Pour1stTime}</td>
+                        <td>
+                            <form onSubmit={handle1stTimeSubmit}>
+                                <label>
+                                <input
+                                    type="text"
+                                    value={Pour1stTimeInput}
+                                    onChange={(e) => set1stPourTimeInput(e.target.value)}
+                                />
+                                </label>
+                                <input type="submit" value="Update" />
+                            </form>
+                        </td>
                     </tr>
                     <tr key={Pour2ndTime}>
                         <th>2nd Pour:</th>
-                        <td>{Pour2ndTime}</td>
+                        <td>
+                            <form onSubmit={handle2ndTimeSubmit}>
+                                <label>
+                                <input
+                                    type="text"
+                                    value={Pour2ndTimeInput}
+                                    onChange={(e) => set2ndPourTimeInput(e.target.value)}
+                                />
+                                </label>
+                                <input type="submit" value="Update" />
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -262,18 +459,6 @@ function Brew() {
                     {isTimeUp && <p>Enjoy your coffee!</p>}
                     {is1stPourDone && <p>End of 1st Pour</p>}
                     {is2ndPourDone && <p>End of 2nd Pour</p>}
-                  </div>
-                  <div className="TimerItem">
-                    <label htmlFor="total-time-input">Total Time (seconds):</label>
-                    <input type="number" id="total-time-input" value={totalTime} onChange={handleTotalTimeChange} />
-                  </div>
-                  <div className="TimerItem">
-                    <label htmlFor="1st-time-input">1st Pour (seconds):</label>
-                    <input type="number" id="1st-time-input" value={Pour1stTime} onChange={handle1stTimeChange} />
-                  </div>
-                  <div className="TimerItem">
-                    <label htmlFor="2nd-time-input">2nd Pour (seconds):</label>
-                    <input type="number" id="2nd-time-input" value={Pour2ndTime} onChange={handle2ndTimeChange} />
                   </div>
                   <buttonrow className="TimerItem">
                     <button1 onClick={handleStart}>Start</button1>
@@ -294,6 +479,7 @@ function Brew() {
     // TODO: new table with coffee selection
     return (
         <div>
+            {showRecipeSelection && renderRecipeSelection()}
             {showGrinderSelection && renderGrinderSelection()}
             {showCoffeSelection && renderCoffeeSelection()}
             {showBrewGuide && renderBrewGuide()}
