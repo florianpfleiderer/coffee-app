@@ -120,6 +120,54 @@ class Burr(InventoryObjects):
         return f'{self.name} costs {self.price}€'
     
 
+#recipe
+class Recipe(InventoryObjects):
+    '''represents a Recipe for a Coffee
+
+    Args:
+        self
+        type(str)
+        price(float)
+
+    Attributes:
+        name (str): name of the recipe
+        coffee (Coffee): the coffee used in the recipe
+        grinder (Grinder): the grind size in microns
+        water (int): the amount of water in ml
+        coffeeIn (int): the amount of coffee in g
+        ratio (float): the ratio of coffee to water
+        temp (int): the temperature of the water in °C
+        totalTime (int): the time in seconds till the coffee is ready
+        Pour1stTime (int): the time in seconds till the first pour is finished
+        Pour2ndTime (int): the time in seconds till the second pour is finished
+
+    '''
+
+    def __init__(self, name=None, coffee=None, grinder=None, water=None, coffeeIn=None, ratio=None, temp=None, totalTime=None, Pour1stTime=None, Pour2ndTime=None, price=None):
+        super().__init__(name, price)
+        self.coffee = coffee
+        self.grinder = grinder
+        self.water = water
+        self.coffeeIn = coffeeIn
+        self.ratio = '1:' + str(round(ratio))
+        self.temp = temp
+        self.totalTime = totalTime
+        self.Pour1stTime = Pour1stTime
+        self.Pour2ndTime = Pour2ndTime
+
+    
+    def __str__(self):
+        return f'{self.name} costs {self.price}€'
+    
+
+
+
+
+
+
+
+
+
 # class CoffeeMachine(InventoryObjects):
 #     '''represents a Coffee Machine
 
