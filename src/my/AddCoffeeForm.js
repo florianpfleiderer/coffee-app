@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './AddCoffeeForm.css'
 
 function AddCoffeeForm(props) {
   const [name, setName] = useState('');
@@ -30,21 +31,31 @@ function AddCoffeeForm(props) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input type="text" value={name} onChange={e => setName(e.target.value)} />
-      </label>
-      <label>
-        Price:
-        <input type="text" value={price} onChange={e => setPrice(e.target.value)} />
-      </label>
-      <label>
-        Farmer:
-        <input type="text" value={farmer} onChange={e => setFarmer(e.target.value)} />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
+    <div class="form-container">
+      <form onSubmit={handleSubmit}>
+        <div class="form-row">
+          <label>
+            Name:
+            <input type="text" value={name} onChange={e => setName(e.target.value)} />
+          </label>
+        </div>
+        <div class="form-row">
+          <label>
+            Price:
+            <input type="text" value={price} onChange={e => setPrice(e.target.value)} />
+          </label>
+        </div>
+        <div class="form-row">
+          <label>
+            Farmer:
+            <input type="text" value={farmer} onChange={e => setFarmer(e.target.value)} />
+          </label>
+        </div>
+        <button class="submit">Submit</button>
+      </form>
+    </div>
+
+
   );
 }
 

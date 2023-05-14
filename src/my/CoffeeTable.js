@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddCoffeeForm from './AddCoffeeForm'
 import EditDialog from './EditDialog';
-// import './CoffeeTable.css'
+import './CoffeeTable.css'
 
 function CoffeeTable() {
     const [inventory, setInventory] = useState([]);
@@ -181,7 +181,7 @@ function CoffeeTable() {
             return (
                 <div>
                     {renderTable()}
-                    <button1 onClick={handleAddCoffee}>Add Coffee</button1>
+                    <button class="button1" onClick={handleAddCoffee}>Add Coffee</button>
                 </div>
             )
         } else if (showDetail) {
@@ -189,15 +189,15 @@ function CoffeeTable() {
                 return (
                     <div>
                         {showEditDialog && <EditDialog coffee={selectedCoffee} attribute={editAttribute} />}
-                        <button1 onClick={handleCloseEditDialog}>Back</button1>
+                        <button class="back" onClick={handleCloseEditDialog}><span>Back</span></button>
                     </div>
                 );
             } else {
                 return (
                     <div>
                         {renderDetail(selectedCoffee)}
-                        <button1 onClick={handleDelete}>Delete</button1>
-                        <button1 onClick={handleBackClick}>Back</button1>
+                        <button class="button1" onClick={handleDelete}>Delete</button>
+                        <button class="back" onClick={handleBackClick}><span>Back</span></button>
                     </div>
                 );
             }
@@ -205,7 +205,7 @@ function CoffeeTable() {
             return (
                 <div>
                     {showForm && <AddCoffeeForm />}
-                    <button1 onClick={handleBackClick}>Back</button1>
+                    <button class="back" onClick={handleBackClick}><span>Back</span></button>
                 </div>
             );
         }
