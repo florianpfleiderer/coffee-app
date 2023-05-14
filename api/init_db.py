@@ -72,3 +72,4 @@ def BrewRecipes(Base):
     grinder = Column(String, ForeignKey('grinder.name'), nullable=False)
     # TODO how to add the recipe itself (a script that declares the
     # duration, stops, etc to be executed by the BrewSection when loaded?)
+
