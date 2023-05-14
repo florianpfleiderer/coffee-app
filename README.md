@@ -8,6 +8,7 @@ We are using the yarn package manager (-> please don't run any npm or other pack
 Please initiate virtual environment with the name 'venv' to use yarn start-api.
 
 ```cd api```
+
 ```python3 -m venv venv```
 
 Please run (to install all requirements in your virtual environment):
