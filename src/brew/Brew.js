@@ -87,6 +87,8 @@ function Brew() {
             setIsTimeUp(true);
           }
         } else {
+        // } else if (isRunning && time >= totalTime) {
+        // f_brewSection
           clearInterval(interval);
         }
         return () => clearInterval(interval);
@@ -318,7 +320,6 @@ function Brew() {
         );
     };
 
-
     // render recipe selection
     const renderRecipeSelection = () => {
         return (
@@ -359,10 +360,6 @@ function Brew() {
         );
     };
 
-
-
-
-
     //renders the timer implemented in the Timer.js file
     //lets me choose a cooffee, grinder
     const renderBrewGuide = () => {
@@ -401,7 +398,7 @@ function Brew() {
                             </form>
                         </td>
                     </tr>
-                    <tr key={totalTime}>
+                    <tr>
                         <th>Total time:</th>
                         <td>
                             <form onSubmit={handleTotalTimeSubmit}>
@@ -416,7 +413,7 @@ function Brew() {
                             </form>
                         </td>
                     </tr>
-                    <tr key={Pour1stTime}>
+                    <tr>
                         <th>1st Pour:</th>
                         <td>
                             <form onSubmit={handle1stTimeSubmit}>
@@ -431,7 +428,7 @@ function Brew() {
                             </form>
                         </td>
                     </tr>
-                    <tr key={Pour2ndTime}>
+                    <tr>
                         <th>2nd Pour:</th>
                         <td>
                             <form onSubmit={handle2ndTimeSubmit}>
@@ -451,7 +448,6 @@ function Brew() {
             <div>
               <div className="Timer">
                 <div className="TimerRow">
-                  <div></div>
                   <div className="TimerItem">
                     <h1 style={{ fontSize: '40px' }}>
                       {minutes}:{seconds < 10 ? '0' : ''}{seconds}
@@ -460,15 +456,25 @@ function Brew() {
                     {is1stPourDone && <p>End of 1st Pour</p>}
                     {is2ndPourDone && <p>End of 2nd Pour</p>}
                   </div>
+
                   <buttonrow className="TimerItem">
                     <button1 onClick={handleStart}>Start</button1>
                     <button1 onClick={handleStop}>Stop</button1>
                     <button1 onClick={handleReset}>Reset</button1>
                   </buttonrow>
-                  
+
                 </div>
               </div>
-              <button onClick={handleBackClick}>Back</button>
+            </div>
+            <div className="TimerButtons">
+              <buttonRow>
+                <brewButton onClick={handleStart}>Start</brewButton>
+                <brewButton onClick={handleStop}>Stop</brewButton>
+                <brewButton onClick={handleReset}>Reset</brewButton>
+              </buttonRow>
+              <div>
+                <button class="back" onClick={handleBackClick}>Back</button>
+              </div>
             </div>
           </div>
         );

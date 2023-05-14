@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './CoffeeTable.css'
+import './AddCoffeeForm.css'
 
 function EditDialog({ coffee, attribute }) {
     const [value, setValue] = useState('');
@@ -34,13 +36,17 @@ function EditDialog({ coffee, attribute }) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                {attribute}:
-                <input type="text" value={value} onChange={handleInputChange} />
-            </label>
-            <button type="submit">Submit</button>
-        </form>
+        <div class="form-container">
+            <form onSubmit={handleSubmit}>
+                <div class="form-row">
+                    <label>
+                        {attribute}:
+                        <input type="text" value={value} onChange={handleInputChange} />
+                    </label>
+                </div>
+                <button class="submit">Submit</button>
+            </form>
+        </div>
     );
 }
 

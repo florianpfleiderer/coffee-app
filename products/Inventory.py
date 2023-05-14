@@ -1,9 +1,4 @@
-# from products import Burr,Coffee,Grinder
-from products import inventoryObjects
-
-#Burrs
-# sspRedSpeed = Burr.Burr(name='SSP Red Speed', type='flat', size=64, price=120)
-# sspLabSweet = Burr.Burr(name='SSP Lab Sweet', type='flat', size=64, price=150)
+from products import InventoryObjects
 
 #Coffees
 chooseCoffee = inventoryObjects.Coffee(name='Choose a Coffee', origin='', variety='', process='', roast='', farmer='', price=0)
@@ -23,3 +18,4 @@ wilfaUniform = inventoryObjects.Grinder(name='Wilfa Uniform', burrs='Wilfa Stand
 newRecipe = inventoryObjects.Recipe(name='Create new Recipe', coffee=chooseCoffee.name, grinder=chooseGrinder.name, water=0, coffeeIn=0, ratio=0, temp=0, totalTime=0, Pour1stTime=0, Pour2ndTime=0)
 v60 = inventoryObjects.Recipe(name='V60', coffee=testCoffee2.name, grinder=wilfaUniform.name, water=250, coffeeIn=15, ratio=250/15, temp=98, totalTime=180, Pour1stTime=60, Pour2ndTime=120)
 aeropress = inventoryObjects.Recipe(name='Aeropress', coffee=testCoffee1.name, grinder=fellowOde.name, water=200, coffeeIn=15, ratio=200/15, temp=97, totalTime=200, Pour1stTime=70, Pour2ndTime=130)
+
