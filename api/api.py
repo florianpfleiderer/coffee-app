@@ -18,13 +18,14 @@ app = Flask(__name__)
 inventory: List[inventory_objects.Coffee]= []
 inventory.append(inv.testCoffee1)
 inventory.append(inv.testCoffee2)
+inventory.append(inv.chooseCoffee)
 
 grinders: List[inventory_objects.Grinder] = []
 grinders.append(inv.fellowOde)
 grinders.append(inv.wilfaUniform)
+grinders.append(inv.chooseGrinder)
 
 recipes: List[inventory_objects.Recipe] = []
-recipes.append(inv.newRecipe)
 recipes.append(inv.aeropress)
 recipes.append(inv.v60)
 

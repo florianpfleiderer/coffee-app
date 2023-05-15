@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { render } from '@testing-library/react';
+import AddRecipeForm from './AddRecipeForm';
 import './Brew.css';
 
 function Brew() {
@@ -14,6 +15,7 @@ function Brew() {
     const [showCoffeSelection, setshowCoffeSelection] = useState(false);
     const [showRecipeSelection, setshowRecipeSelection] = useState(true);
     const [showBrewGuide, setshowBrewGuide] = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
     const [totalTime, setTotalTime] = useState(0); // Maximum time in seconds
@@ -28,7 +30,12 @@ function Brew() {
     const [Pour1stTimeInput, set1stPourTimeInput] = useState("");
     const [Pour2ndTimeInput, set2ndPourTimeInput] = useState("");
     const [WaterInput, setWaterInput] = useState("");
+    const [CoffeeInInput, setCoffeeInInput] = useState("");
+    const [TempInput, setTempInput] = useState("");
     const [editAttribute, setEditAttribute] = useState('');
+    const [RecipeNameInput, setRecipeNameInput] = useState("");
+
+
 
 
     
@@ -80,6 +87,7 @@ function Brew() {
 
 
 
+
     //finds grinder by name
     const find_grinder_by_name = (name) => {
         fetchGrinders();
@@ -98,7 +106,26 @@ function Brew() {
             }
         }
     }
-    
+
+    const find_recipe_by_name = (name) => {
+        fetchRecipes();
+        for (let i = 0; i < inventoryRecipes.length; i++) {
+            if (inventoryRecipes[i].name === name) {
+                return inventoryRecipes[i];
+            }
+        }
+    }
+
+    // const calculateRatio = () => {
+    //     if (WaterInput != 0 && CoffeeInInput != 0 && (WaterInput / CoffeeInInput) != 0) {
+    //         selectedRecipe.ratio = WaterInput / CoffeeInInput;
+    //     } else {
+    //         selectedRecipe.ratio = 0;
+    //     }
+    // }
+
+
+
 
 
 
@@ -134,10 +161,13 @@ function Brew() {
      //if choose BrewGuide
     const handleRecipeRowClick = (recipe) => {
         setSelectedRecipe(recipe);
-    
         setSelectedGrinder(find_grinder_by_name(recipe.grinder));
         setSelectedCoffee(find_coffee_by_name(recipe.coffee));
+        setRecipeNameInput(recipe.name);
         setWaterInput(recipe.water);
+        setCoffeeInInput(recipe.coffeeIn);
+        //calculateRatio();
+        setTempInput(recipe.temp);
         setTotalTimeInput(recipe.totalTime);
         set1stPourTimeInput(recipe.Pour1stTime);
         set2ndPourTimeInput(recipe.Pour2ndTime);
@@ -153,6 +183,7 @@ function Brew() {
         setshowCoffeSelection(false);
         setshowRecipeSelection(false);
         setshowBrewGuide(true);
+        handleSaveClick();
       }
       //choose Coffee
       const handleCoffeeRowClick = (coffee) => {
@@ -161,32 +192,14 @@ function Brew() {
         setshowCoffeSelection(false);
         setshowRecipeSelection(false);
         setshowBrewGuide(true);
+        handleSaveClick();
       }
 
     const handleBackClick = () => {
-        axios.get('/api/grinders')
-            .then(response => {
-                setInventoryGrinders(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        fetchCoffees();
+        fetchGrinders();
+        fetchRecipes();
         
-        axios.get('/api/coffees')
-            .then(response => {
-                setInventoryCoffees(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
-        axios.get('/api/recipes')
-            .then(response => {
-                setInventoryRecipes(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
           
         setSelectedCoffee("Choose a Coffee");
         setSelectedGrinder("Choose a Grinder");
@@ -232,44 +245,87 @@ function Brew() {
         setIsTimeUp(false);
         setIs1stPourDone(false);
         setIs2ndPourDone(false);
+        handleSaveClick();
       };
 
         const handleWaterSubmit = (e) => {
         e.preventDefault();
         setWaterInput(parseInt(WaterInput));
+        //calculateRatio();
+        handleSaveClick();
+        };
+
+        const handleCoffeeInSubmit = (e) => {
+        e.preventDefault();
+        setCoffeeInInput(parseInt(CoffeeInInput));
+        // calculateRatio();
+        handleSaveClick();
+        };
+
+        const handleTempSubmit = (e) => {
+        e.preventDefault();
+        setTempInput(parseInt(TempInput));
+        handleSaveClick();
+        };
+
+
+
+        const handleNameSubmit = (e) => {
+        e.preventDefault();
+        setRecipeNameInput(RecipeNameInput);
+        handleSaveClick();
         };
 
 
         const handleEditClick = (attribute) => {
-            setEditAttribute(attribute);
             if(attribute === "grinder") {
-                    axios.get('/api/grinders')
-                        .then(response => {
-                        setInventoryGrinders(response.data);
-                        })
-                        .catch(error => {
-                        console.error(error);
-                        });
+                fetchGrinders();
                 setshowGrinderSelection(true);
                 setshowCoffeSelection(false);
                 setshowRecipeSelection(false);
                 setshowBrewGuide(false);
             } else if (attribute === "coffee") {
-                    axios.get('/api/coffees')
-                        .then(response => {
-                        setInventoryCoffees(response.data);
-                        })
-                        .catch(error => {
-                        console.error(error);
-                        });
+                fetchCoffees();
                 setshowGrinderSelection(false);
                 setshowCoffeSelection(true);
                 setshowRecipeSelection(false);
                 setshowBrewGuide(false);
             }
-
-            
         };
+
+        //saves the edited grinder/coffee to the api
+        const handleSaveClick = () => {
+            const updatedRecipe = { ...selectedRecipe };
+            updatedRecipe.name = RecipeNameInput;
+            updatedRecipe.grinder = selectedGrinder.name;
+            updatedRecipe.coffee = selectedCoffee.name;
+            updatedRecipe.water = WaterInput;
+            updatedRecipe.coffeeIn = CoffeeInInput;
+            updatedRecipe.temp = TempInput;
+            updatedRecipe.totalTime = totalTimeInput;
+            updatedRecipe.Pour1stTime = Pour1stTimeInput;
+            updatedRecipe.Pour2ndTime = Pour2ndTimeInput;
+            axios.put('api/recipes/' + selectedRecipe.name, updatedRecipe)
+            .then((response) => {
+                fetchRecipes();
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        };
+
+        const handleAddRecipe = () => {
+            setShowForm(true);
+            setshowGrinderSelection(false);
+            setshowCoffeSelection(false);
+            setshowRecipeSelection(false);
+            setshowBrewGuide(false);
+        };
+
+    
+
 
 
 
@@ -343,6 +399,7 @@ function Brew() {
     // render recipe selection
     const renderRecipeSelection = () => {
         return (
+            
             // render the grinder table here
             // add an onClick event handler to each row
             // call handleRowClick with the clicked coffee object
@@ -369,13 +426,14 @@ function Brew() {
                                 <td>{recipe.name}</td>
                                 <td>{recipe.grinder}</td>
                                 <td>{recipe.coffee}</td>
-                                <td>{recipe.ratio}</td>
+                                <td>1:{recipe.ratio}</td>
                                 <td>{recipe.water}</td>
                                 <td>{recipe.totalTime}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+                <button class="button1" onClick={handleAddRecipe}>Add Recipe</button>
             </div>
         );
     };
@@ -391,6 +449,22 @@ function Brew() {
 
             <table>
                 <tbody>
+                    <tr key={selectedRecipe.name}>
+                        <th>Name:</th>
+                        <td>
+                            <form onSubmit={handleNameSubmit}>
+                                <label>
+                                <input
+                                    type="text"
+                                    value={RecipeNameInput}
+                                    onChange={(e) => setRecipeNameInput(e.target.value)}
+                                />
+                                </label>
+                                <input type="submit" value="Update" />
+                            </form>
+                        </td>
+                    </tr>
+
                     <tr key={selectedGrinder.name} onClick={() => handleEditClick('grinder')}>
                         <th>Grinder:</th>
                         <td>{selectedGrinder.name}</td>
@@ -412,6 +486,36 @@ function Brew() {
                                     type="text"
                                     value={WaterInput}
                                     onChange={(e) => setWaterInput(e.target.value)}
+                                />
+                                </label>
+                                <input type="submit" value="Update" />
+                            </form>
+                        </td>
+                    </tr>
+                    <tr key={selectedRecipe.coffeeIn}>
+                        <th>Coffee in g:</th>
+                        <td>
+                            <form onSubmit={handleCoffeeInSubmit}>
+                                <label>
+                                <input
+                                    type="text"
+                                    value={CoffeeInInput}
+                                    onChange={(e) => setCoffeeInInput(e.target.value)}
+                                />
+                                </label>
+                                <input type="submit" value="Update" />
+                            </form>
+                        </td>
+                    </tr>
+                    <tr key={selectedRecipe.temp}>
+                        <th>Temperature in C:</th>
+                        <td>
+                            <form onSubmit={handleTempSubmit}>
+                                <label>
+                                <input
+                                    type="text"
+                                    value={TempInput}
+                                    onChange={(e) => setTempInput(e.target.value)}
                                 />
                                 </label>
                                 <input type="submit" value="Update" />
@@ -485,10 +589,11 @@ function Brew() {
                 <brewButton onClick={handleStart}>Start</brewButton>
                 <brewButton onClick={handleStop}>Stop</brewButton>
                 <brewButton onClick={handleReset}>Reset</brewButton>
+              {/* </buttonRow>
+              <buttonRow> */}
+                <brewButton onClick={handleBackClick}>Back</brewButton>
+                <brewButton onClick={handleSaveClick}>Save</brewButton>
               </buttonRow>
-              <div>
-                <button class="back" onClick={handleBackClick}>Back</button>
-              </div>
             </div>
           </div>
         );
@@ -497,12 +602,29 @@ function Brew() {
 
 
     // TODO: new table with coffee selection
+
+    const renderContent = () => {
+        if (showRecipeSelection) {
+            return renderRecipeSelection();
+        } else if (showGrinderSelection) {
+            return renderGrinderSelection();
+        } else if (showCoffeSelection) {
+            return renderCoffeeSelection();
+        } else if (showBrewGuide) {
+            return renderBrewGuide();
+        } else if (showForm) {
+            return (
+                <div>
+                    {showForm && <AddRecipeForm />}
+                    <button class="back" onClick={handleBackClick}><span>Back</span></button>
+                </div>
+            );
+        }
+    };
+
     return (
         <div>
-            {showRecipeSelection && renderRecipeSelection()}
-            {showGrinderSelection && renderGrinderSelection()}
-            {showCoffeSelection && renderCoffeeSelection()}
-            {showBrewGuide && renderBrewGuide()}
+            {renderContent()}
         </div>
 
     );

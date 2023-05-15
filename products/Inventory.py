@@ -21,12 +21,9 @@ wilfaUniform = inventory_objects.Grinder(name='Wilfa Uniform',
                                         burrs='Wilfa Standard Burrs', price='250')
 
 #Recipes
-newRecipe = inventory_objects.Recipe(name='Create new Recipe', coffee=chooseCoffee.name,
-                                    grinder=chooseGrinder.name, water=0, coffeeIn=0,
-                                    ratio=0, temp=0, totalTime=0, Pour1stTime=0, Pour2ndTime=0)
 v60 = inventory_objects.Recipe(name='V60', coffee=testCoffee2.name, grinder=wilfaUniform.name,
-                              water=250, coffeeIn=15, ratio=250/15, temp=98, totalTime=180,
+                              water=250, coffeeIn=15, ratio=250/10, temp=98, totalTime=180,
                               Pour1stTime=60, Pour2ndTime=120)
 aeropress = inventory_objects.Recipe(name='Aeropress', coffee=testCoffee1.name, 
-                                    grinder=fellowOde.name, water=200, coffeeIn=15, ratio=200/15,
+                                    grinder=fellowOde.name, water=200, coffeeIn=15, ratio=200/10,
                                     temp=97, totalTime=200, Pour1stTime=70, Pour2ndTime=130)

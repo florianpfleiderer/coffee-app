@@ -144,13 +144,13 @@ class Recipe(InventoryObjects):
 
     '''
 
-    def __init__(self, name=None, coffee=None, grinder=None, water=None, coffeeIn=None, ratio=None, temp=None, totalTime=None, Pour1stTime=None, Pour2ndTime=None, price=None):
+    def __init__(self, name=None, coffee='Choose a Coffee', grinder='Choose a Grinder', water=0, coffeeIn=0, ratio=0, temp=0, totalTime=0, Pour1stTime=0, Pour2ndTime=0, price=0):
         super().__init__(name, price)
         self.coffee = coffee
         self.grinder = grinder
         self.water = water
         self.coffeeIn = coffeeIn
-        self.ratio = '1:' + str(round(ratio))
+        self.ratio = ratio
         self.temp = temp
         self.totalTime = totalTime
         self.Pour1stTime = Pour1stTime
