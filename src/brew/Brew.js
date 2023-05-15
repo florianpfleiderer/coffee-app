@@ -33,35 +33,73 @@ function Brew() {
 
     
 
-    useEffect(() => {
-        axios.get('/api/grinders')
-            .then(response => {
-                setInventoryGrinders(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, []);
+    const fetchGrinders = () => {
+        axios
+          .get('/api/grinders')
+          .then((response) => {
+            setInventoryGrinders(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+      
+      useEffect(() => {
+        fetchGrinders();
+      }, []);
 
-    useEffect(() => {
-        axios.get('/api/coffees')
-            .then(response => {
-                setInventoryCoffees(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, []);
+      const fetchCoffees = () => {
+        axios
+          .get('/api/coffees')
+          .then((response) => {
+            setInventoryCoffees(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+      
+      useEffect(() => {
+        fetchCoffees();
+      }, []);
 
-    useEffect(() => {
-        axios.get('/api/recipes')
-            .then(response => {
-                setInventoryRecipes(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, []);
+      const fetchRecipes = () => {
+        axios
+          .get('/api/recipes')
+          .then((response) => {
+            setInventoryRecipes(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+      
+      useEffect(() => {
+        fetchRecipes();
+      }, []);
+
+
+
+    //finds grinder by name
+    const find_grinder_by_name = (name) => {
+        fetchGrinders();
+        for (let i = 0; i < inventoryGrinders.length; i++) {
+            if (inventoryGrinders[i].name === name) {
+                return inventoryGrinders[i];
+            }
+        }
+    }
+
+    const find_coffee_by_name = (name) => {
+        fetchCoffees();
+        for (let i = 0; i < inventoryCoffees.length; i++) {
+            if (inventoryCoffees[i].name === name) {
+                return inventoryCoffees[i];
+            }
+        }
+    }
+    
+
 
 
     //Timer
@@ -96,8 +134,9 @@ function Brew() {
      //if choose BrewGuide
     const handleRecipeRowClick = (recipe) => {
         setSelectedRecipe(recipe);
-        setSelectedGrinder(recipe.grinder);
-        setSelectedCoffee(recipe.coffee);
+    
+        setSelectedGrinder(find_grinder_by_name(recipe.grinder));
+        setSelectedCoffee(find_coffee_by_name(recipe.coffee));
         setWaterInput(recipe.water);
         setTotalTimeInput(recipe.totalTime);
         set1stPourTimeInput(recipe.Pour1stTime);
@@ -109,19 +148,19 @@ function Brew() {
     }
       //choose Grinder    
       const handleGrinderRowClick = (grinder) => {
-          setSelectedGrinder(grinder);
-          setshowGrinderSelection(false);
-          setshowRecipeSelection(false);
-          setshowBrewGuide(true);
-          setshowCoffeSelection(false);
+        setSelectedGrinder(grinder);
+        setshowGrinderSelection(false);
+        setshowCoffeSelection(false);
+        setshowRecipeSelection(false);
+        setshowBrewGuide(true);
       }
       //choose Coffee
       const handleCoffeeRowClick = (coffee) => {
-          setSelectedCoffee(coffee);
-          setshowCoffeSelection(false);
-          setshowRecipeSelection(false);
-          setshowGrinderSelection(false);
-          setshowBrewGuide(true);
+        setSelectedCoffee(coffee);
+        setshowGrinderSelection(false);
+        setshowCoffeSelection(false);
+        setshowRecipeSelection(false);
+        setshowBrewGuide(true);
       }
 
     const handleBackClick = () => {
@@ -182,15 +221,6 @@ function Brew() {
         setIs1stPourDone(false);
         setIs2ndPourDone(false);
       };
-    
-      const handleTotalTimeChange = (event) => {
-        setTotalTime(Number(event.target.value));
-        setTime(0);
-        setIsRunning(false);
-        setIsTimeUp(false);
-        setIs1stPourDone(false);
-        setIs2ndPourDone(false);
-      };
 
       const handleTimeSubmit = (e) => {
         e.preventDefault();
@@ -213,11 +243,25 @@ function Brew() {
         const handleEditClick = (attribute) => {
             setEditAttribute(attribute);
             if(attribute === "grinder") {
+                    axios.get('/api/grinders')
+                        .then(response => {
+                        setInventoryGrinders(response.data);
+                        })
+                        .catch(error => {
+                        console.error(error);
+                        });
                 setshowGrinderSelection(true);
                 setshowCoffeSelection(false);
                 setshowRecipeSelection(false);
                 setshowBrewGuide(false);
             } else if (attribute === "coffee") {
+                    axios.get('/api/coffees')
+                        .then(response => {
+                        setInventoryCoffees(response.data);
+                        })
+                        .catch(error => {
+                        console.error(error);
+                        });
                 setshowGrinderSelection(false);
                 setshowCoffeSelection(true);
                 setshowRecipeSelection(false);
@@ -349,11 +393,11 @@ function Brew() {
                 <tbody>
                     <tr key={selectedGrinder.name} onClick={() => handleEditClick('grinder')}>
                         <th>Grinder:</th>
-                        <td>{selectedGrinder}</td>
+                        <td>{selectedGrinder.name}</td>
                     </tr>
                     <tr key={selectedCoffee.name} onClick={() => handleEditClick('coffee')}>
                         <th>Coffee:</th>
-                        <td>{selectedCoffee}</td>
+                        <td>{selectedCoffee.name}</td>
                     </tr>
                     <tr>
                         <th>Ratio:</th>
