@@ -28,6 +28,7 @@ function Brew() {
     const [Pour1stTimeInput, set1stPourTimeInput] = useState("");
     const [Pour2ndTimeInput, set2ndPourTimeInput] = useState("");
     const [WaterInput, setWaterInput] = useState("");
+    const [editAttribute, setEditAttribute] = useState('');
 
 
     
@@ -83,12 +84,10 @@ function Brew() {
           if(time === Pour2ndTime + 5) {
             setIs2ndPourDone(false);
           }
-          if(time === totalTime) {
-            setIsTimeUp(true);
-          }
         } else {
         // } else if (isRunning && time >= totalTime) {
         // f_brewSection
+          if(time === totalTime) {setIsTimeUp(true);}
           clearInterval(interval);
         }
         return () => clearInterval(interval);
@@ -113,8 +112,8 @@ function Brew() {
           setSelectedGrinder(grinder);
           setshowGrinderSelection(false);
           setshowRecipeSelection(false);
-          setshowBrewGuide(false);
-          setshowCoffeSelection(true);
+          setshowBrewGuide(true);
+          setshowCoffeSelection(false);
       }
       //choose Coffee
       const handleCoffeeRowClick = (coffee) => {
@@ -124,10 +123,6 @@ function Brew() {
           setshowGrinderSelection(false);
           setshowBrewGuide(true);
       }
-
-   
-    
-
 
     const handleBackClick = () => {
         axios.get('/api/grinders')
@@ -169,6 +164,7 @@ function Brew() {
     };
 
     const handleStart = () => {
+        if(time === totalTime) {setTime(0);}
         setIsRunning(true);
         setIsTimeUp(false);
         setIs1stPourDone(false);
@@ -196,36 +192,17 @@ function Brew() {
         setIs2ndPourDone(false);
       };
 
-      const handleTotalTimeSubmit = (e) => {
+      const handleTimeSubmit = (e) => {
         e.preventDefault();
         setTotalTime(parseInt(totalTimeInput));
-        setTime(0);
-        setIsRunning(false);
-        setIsTimeUp(false);
-        setIs1stPourDone(false);
-        setIs2ndPourDone(false);
-      };
-      
-
-      const handle1stTimeSubmit = (e) => {
-        e.preventDefault();
         set1stPourTime(parseInt(Pour1stTimeInput));
-        setTime(0);
-        setIsRunning(false);
-        setIsTimeUp(false);
-        setIs1stPourDone(false);
-        setIs2ndPourDone(false);
-      };
-
-        const handle2ndTimeSubmit = (e) => {
-        e.preventDefault();
         set2ndPourTime(parseInt(Pour2ndTimeInput));
         setTime(0);
         setIsRunning(false);
         setIsTimeUp(false);
         setIs1stPourDone(false);
         setIs2ndPourDone(false);
-        };
+      };
 
         const handleWaterSubmit = (e) => {
         e.preventDefault();
@@ -233,24 +210,23 @@ function Brew() {
         };
 
 
+        const handleEditClick = (attribute) => {
+            setEditAttribute(attribute);
+            if(attribute === "grinder") {
+                setshowGrinderSelection(true);
+                setshowCoffeSelection(false);
+                setshowRecipeSelection(false);
+                setshowBrewGuide(false);
+            } else if (attribute === "coffee") {
+                setshowGrinderSelection(false);
+                setshowCoffeSelection(true);
+                setshowRecipeSelection(false);
+                setshowBrewGuide(false);
+            }
 
+            
+        };
 
-
-
-
-      const handle1stTimeChange = (event) => {
-        set1stPourTime(Number(event.target.value));
-        setTime(0);
-        setIsRunning(false);
-        setIsTimeUp(false);
-      };
-
-      const handle2ndTimeChange = (event) => {
-        set2ndPourTime(Number(event.target.value));
-        setTime(0);
-        setIsRunning(false);
-        setIsTimeUp(false);
-      };
 
 
     
@@ -371,11 +347,11 @@ function Brew() {
 
             <table>
                 <tbody>
-                    <tr key={selectedGrinder.name}>
+                    <tr key={selectedGrinder.name} onClick={() => handleEditClick('grinder')}>
                         <th>Grinder:</th>
                         <td>{selectedGrinder}</td>
                     </tr>
-                    <tr key={selectedCoffee.name}>
+                    <tr key={selectedCoffee.name} onClick={() => handleEditClick('coffee')}>
                         <th>Coffee:</th>
                         <td>{selectedCoffee}</td>
                     </tr>
@@ -401,7 +377,7 @@ function Brew() {
                     <tr>
                         <th>Total time:</th>
                         <td>
-                            <form onSubmit={handleTotalTimeSubmit}>
+                            <form onSubmit={handleTimeSubmit}>
                                 <label>
                                 <input
                                     type="text"
@@ -416,7 +392,7 @@ function Brew() {
                     <tr>
                         <th>1st Pour:</th>
                         <td>
-                            <form onSubmit={handle1stTimeSubmit}>
+                            <form onSubmit={handleTimeSubmit}>
                                 <label>
                                 <input
                                     type="text"
@@ -431,7 +407,7 @@ function Brew() {
                     <tr>
                         <th>2nd Pour:</th>
                         <td>
-                            <form onSubmit={handle2ndTimeSubmit}>
+                            <form onSubmit={handleTimeSubmit}>
                                 <label>
                                 <input
                                     type="text"
@@ -448,6 +424,7 @@ function Brew() {
             <div>
               <div className="Timer">
                 <div className="TimerRow">
+                  <div></div>
                   <div className="TimerItem">
                     <h1 style={{ fontSize: '40px' }}>
                       {minutes}:{seconds < 10 ? '0' : ''}{seconds}
@@ -456,13 +433,6 @@ function Brew() {
                     {is1stPourDone && <p>End of 1st Pour</p>}
                     {is2ndPourDone && <p>End of 2nd Pour</p>}
                   </div>
-
-                  <buttonrow className="TimerItem">
-                    <button1 onClick={handleStart}>Start</button1>
-                    <button1 onClick={handleStop}>Stop</button1>
-                    <button1 onClick={handleReset}>Reset</button1>
-                  </buttonrow>
-
                 </div>
               </div>
             </div>
