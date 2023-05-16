@@ -589,8 +589,8 @@ function Brew() {
                 <brewButton onClick={handleStart}>Start</brewButton>
                 <brewButton onClick={handleStop}>Stop</brewButton>
                 <brewButton onClick={handleReset}>Reset</brewButton>
-              {/* </buttonRow>
-              <buttonRow> */}
+              </buttonRow>
+              <buttonRow>
                 <brewButton onClick={handleBackClick}>Back</brewButton>
                 <brewButton onClick={handleSaveClick}>Save</brewButton>
               </buttonRow>
