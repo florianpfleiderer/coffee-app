@@ -83,9 +83,9 @@ fellowOde = GrinderDB(name='Fellow ode', burr='sspRedSpeed', price=350)
 wilfaUniform = GrinderDB(name='Wilfa Uniform', burr='Wilfa Standard Burrs', price='250')
 grinders = [fellowOde, wilfaUniform]
 
-recipeV60 = BrewRecipes(name='V60', method='pour over', coffee=testCoffee1, 
+recipeV60 = BrewRecipes(name='V60', method='pour over', coffee=testCoffee1,
                         grinder=fellowOde)
-recipeAeropress = BrewRecipes(name='Aeropress', method='immersion', coffee=testCoffee2, 
+recipeAeropress = BrewRecipes(name='Aeropress', method='immersion', coffee=testCoffee2,
                               grinder=wilfaUniform)
 recipes = [recipeV60, recipeAeropress]
 
@@ -96,3 +96,5 @@ with Session() as session:
         session.add(coffee)
     # only one thread supported (siehe github issue)
     session.commit()
+
+
