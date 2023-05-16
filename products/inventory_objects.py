@@ -1,7 +1,7 @@
-import json
-'''this class resembles an Inventory Object of the Coffee App
+'''this class resembles an Inventory Object of the Coffee App.
 
-it conatains the Methods used in all Inventory objects'''
+it contains the Methods used in all Inventory objects
+'''
 
 class InventoryObjects:
     """represents an Inventory Object
@@ -10,17 +10,18 @@ class InventoryObjects:
         self
         name(str)
         price(float)
-    """ 
+    """
 
     def __init__(self, name, price):
         self.name = name
         self.price = price
 
-    def convertToJson(self):
+    def convert_to_json(self):
+        '''converts the Object to a json object'''
         return vars(self)
-    
+
     @classmethod
-    def fromJson(cls, json):
+    def from_json(cls, json):
         ''' creates a new instance of an Object from a json object
         
         Args:
@@ -29,11 +30,11 @@ class InventoryObjects:
         Returns:
             Object: a new instance of the sepcified inventory object
         '''
-        return cls(**json) 
-    
+        return cls(**json)
+ 
     def __str__(self):
         return f'{self.name} costs {self.price}€'
-    
+ 
 
 class Coffee(InventoryObjects):
     '''represents an Instance of a Coffee Variety
@@ -119,6 +120,54 @@ class Burr(InventoryObjects):
     def __str__(self):
         return f'{self.name} costs {self.price}€'
     
+
+#recipe
+class Recipe(InventoryObjects):
+    '''represents a Recipe for a Coffee
+
+    Args:
+        self
+        type(str)
+        price(float)
+
+    Attributes:
+        name (str): name of the recipe
+        coffee (Coffee): the coffee used in the recipe
+        grinder (Grinder): the grind size in microns
+        water (int): the amount of water in ml
+        coffeeIn (int): the amount of coffee in g
+        ratio (float): the ratio of coffee to water
+        temp (int): the temperature of the water in °C
+        totalTime (int): the time in seconds till the coffee is ready
+        Pour1stTime (int): the time in seconds till the first pour is finished
+        Pour2ndTime (int): the time in seconds till the second pour is finished
+
+    '''
+
+    def __init__(self, name=None, coffee='Choose a Coffee', grinder='Choose a Grinder', water=0, coffeeIn=0, ratio=0, temp=0, totalTime=0, Pour1stTime=0, Pour2ndTime=0, price=0):
+        super().__init__(name, price)
+        self.coffee = coffee
+        self.grinder = grinder
+        self.water = water
+        self.coffeeIn = coffeeIn
+        self.ratio = ratio
+        self.temp = temp
+        self.totalTime = totalTime
+        self.Pour1stTime = Pour1stTime
+        self.Pour2ndTime = Pour2ndTime
+
+    
+    def __str__(self):
+        return f'{self.name} costs {self.price}€'
+    
+
+
+
+
+
+
+
+
 
 # class CoffeeMachine(InventoryObjects):
 #     '''represents a Coffee Machine
