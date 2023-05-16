@@ -20,7 +20,7 @@ class CoffeeDB(Base):
         farmer (str): the farmer of the coffee
         
     '''
-    __tablename__ = 'coffee'
+    __tablename__ = 'coffees'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
@@ -41,7 +41,7 @@ class GrinderDB(Base):
         burr (str): the burrs inside the grinder
         
     '''
-    __tablename__ = 'grinder'
+    __tablename__ = 'grinders'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
@@ -67,8 +67,8 @@ class BrewRecipes(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     method = Column(String, nullable=False)
-    coffee = Column(String, ForeignKey('coffee.name'), nullable=False)
-    grinder = Column(String, ForeignKey('grinder.name'), nullable=False)
+    coffee = Column(String, ForeignKey('coffees.name'), nullable=False)
+    grinder = Column(String, ForeignKey('grinders.name'), nullable=False)
     # TODO add a backpopulated relationship with CoffeeDB and GrinderDB for recipes
     # TODO how to add the recipe itself (a script that declares the
     # duration, stops, etc to be executed by the BrewSection when loaded?)
@@ -96,5 +96,17 @@ with Session() as session:
         session.add(coffee)
     # only one thread supported (siehe github issue)
     session.commit()
+
+# with Session() as session:
+#     for grinder in grinders:
+#         session.add(grinder)
+#     # only one thread supported (siehe github issue)
+#     session.commit()
+
+# with Session() as session:
+#     for recipe in recipes:
+#         session.add(recipe)
+#     # only one thread supported (siehe github issue)
+    # session.commit()
 
 
