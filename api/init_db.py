@@ -2,7 +2,7 @@
 """
 
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 
 
 engine = create_engine('sqlite:///test.db')
@@ -27,6 +27,7 @@ class CoffeeDB(Base):
     farmer = Column(String, nullable=False)
     # TODO add rest of the attributes
     # TODO add a one to many relationship with BrewRecipes
+    brew_recipes = relationship('BrewRecipes', back_populates='coffee')
 
 
 class GrinderDB(Base):
@@ -48,6 +49,7 @@ class GrinderDB(Base):
     burr = Column(String, nullable=False)
     # TODO add rest of the attributes
     # TODO add a one to many relationsship with BrewRecipes
+    brew_recipes = relationship('BrewRecipes', back_populates='grinder')
 
 
 class BrewRecipes(Base):
@@ -63,12 +65,14 @@ class BrewRecipes(Base):
         coffee (str): the coffee used in the brew recipe
         grinder (str): the grinder used in the brew recipe
     '''
-    __tablename__ = 'brew_recipes'
+    __tablename__ = 'recipes'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     method = Column(String, nullable=False)
-    coffee = Column(String, ForeignKey('coffees.name'), nullable=False)
-    grinder = Column(String, ForeignKey('grinders.name'), nullable=False)
+    coffee_id = Column(Integer, ForeignKey('coffees.id'), nullable=False)
+    grinder_id = Column(Integer, ForeignKey('grinders.id'), nullable=False)
+    coffee = relationship('CoffeeDB', back_populates='brew_recipes')
+    grinder = relationship('GrinderDB', back_populates='brew_recipes')
     # TODO add a backpopulated relationship with CoffeeDB and GrinderDB for recipes
     # TODO how to add the recipe itself (a script that declares the
     # duration, stops, etc to be executed by the BrewSection when loaded?)
@@ -87,26 +91,61 @@ recipeV60 = BrewRecipes(name='V60', method='pour over', coffee=testCoffee1,
                         grinder=fellowOde)
 recipeAeropress = BrewRecipes(name='Aeropress', method='immersion', coffee=testCoffee2,
                               grinder=wilfaUniform)
-recipes = [recipeV60, recipeAeropress]
+recipeSpecial = BrewRecipes(name='Special', method='special', coffee=testCoffee2,
+                            grinder=fellowOde)
+recipes = [recipeV60, recipeAeropress, recipeSpecial]
 
 Session = sessionmaker(bind=engine)
 
 with Session() as session:
     for coffee in coffees:
-        session.add(coffee)
-    # only one thread supported (siehe github issue)
+        existing_coffees = (
+            session.query(CoffeeDB)
+            .filter(CoffeeDB.name == coffee.name)
+            .filter(CoffeeDB.price == coffee.price)
+            .first()
+        )
+        if existing_coffees is None:
+            session.add(coffee) 
+
+    for grinder in grinders:
+        existing_grinders = (
+            session.query(GrinderDB)
+            .filter(GrinderDB.name == grinder.name)
+            .filter(GrinderDB.price == grinder.price)
+            .first()
+        )
+        if existing_grinders is None:
+            session.add(grinder)
+
+    for recipe in recipes:
+        existing_recipes = (
+            session.query(BrewRecipes)
+            .filter(BrewRecipes.name == recipe.name)
+            .filter(BrewRecipes.method == recipe.method)
+            .first()
+        )
+        if existing_recipes is None:
+            session.add(recipe)
     session.commit()
 
-# with Session() as session:
-#     for grinder in grinders:
-#         session.add(grinder)
-#     # only one thread supported (siehe github issue)
-#     session.commit()
+def show_recipes():
+    '''This function prints all the recipes in the database.'''
+    with Session() as session:
+        recipes_all = session.query(BrewRecipes).all()
+        for recipe in recipes_all:
+            print(f'Recipe: {recipe.name}, {recipe.method}, {recipe.coffee.name}, {recipe.grinder.name}')
 
-# with Session() as session:
-#     for recipe in recipes:
-#         session.add(recipe)
-#     # only one thread supported (siehe github issue)
-    # session.commit()
+def show_coffees():
+    '''This function prints all the coffees in the database.'''
+    with Session() as session:
+        coffees_all = session.query(CoffeeDB).all()
+        for coffee in coffees_all:
+            print(f'Coffee: {coffee.name}, {coffee.price}, {coffee.farmer}')
+            print(f'Brew recipes: ')
+            for recipe in coffee.brew_recipes:
+                print(f'{recipe.name}, {recipe.method}, {recipe.coffee.name}, {recipe.grinder.name}')
 
-
+if __name__ == '__main__':
+    show_recipes()
+    show_coffees()
