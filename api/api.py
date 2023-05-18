@@ -29,8 +29,6 @@ recipes: List[inventory_objects.Recipe] = []
 recipes.append(inv.aeropress)
 recipes.append(inv.v60)
 
-
-
 # my Coffee section
 @app.route('/api/coffees', methods=['POST', 'GET'])
 def add_coffee():
@@ -39,7 +37,8 @@ def add_coffee():
     if request.method == 'POST':
         coffee_data = request.get_json()
         inventory.append(inventory_objects.Coffee.from_json(coffee_data))
-        logging.debug('type %s added', type(inventory_objects.Coffee.from_json(coffee_data)).__name__)
+        logging.debug('type %s added', type(inventory_objects.Coffee
+                                            .from_json(coffee_data)).__name__)
         return 'Coffee added', 200
     elif request.method == 'GET':
         # logging.debug([ob.convert_to_json() for ob in inventory])
@@ -82,12 +81,13 @@ def add_grinder():
     if request.method == 'POST':
         grinder_data = request.get_json()
         grinders.append(inventory_objects.Grinder.from_json(grinder_data))
-        logging.debug('type %s added', type(inventory_objects.Grinder.from_json(grinder_data)).__name__)
+        logging.debug('type %s added', type(inventory_objects.Grinder
+                                            .from_json(grinder_data)).__name__)
         return 'Grinder added', 200
     elif request.method == 'GET':
         logging.debug(grinders)
         return [ob.convert_to_json() for ob in grinders], 200
-    
+
 
 @app.route('/api/grinders/<grinder_name>', methods=['DELETE'])
 def delete_grinder(grinder_name):
@@ -111,9 +111,9 @@ def update_grinder(grinder_name):
 def find_grinder_by_name(name):
     '''returns the index of a grinder by name'''
     for i, c in enumerate(grinders):
-        return i if(c.name is name) else -1 
-   
-    
+        return i if(c.name is name) else -1
+
+
 # brewrecipes
 @app.route('/api/recipes', methods=['POST', 'GET'])
 def add_recipe():
@@ -121,12 +121,13 @@ def add_recipe():
     if request.method == 'POST':
         recipe_data = request.get_json()
         recipes.append(inventory_objects.Recipe.from_json(recipe_data))
-        logging.debug('type %s added', type(inventory_objects.Recipe.from_json(recipe_data)).__name__)
+        logging.debug('type %s added', type(inventory_objects.Recipe
+                                            .from_json(recipe_data)).__name__)
         return 'Recipe added', 200
     elif request.method == 'GET':
         #logging.debug(recipes)
         return [ob.convert_to_json() for ob in recipes], 200
-    
+
 @app.route('/api/recipes/<recipe_name>', methods=['DELETE'])
 def delete_recipe(recipe_name):
     '''deletes a recipe from the inventory'''
