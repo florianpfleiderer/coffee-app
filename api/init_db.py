@@ -106,7 +106,7 @@ with Session() as session:
             .first()
         )
         if existing_coffees is None:
-            session.add(coffee) 
+            session.add(coffee)
 
     for grinder in grinders:
         existing_grinders = (
@@ -134,7 +134,8 @@ def show_recipes():
     with Session() as session:
         recipes_all = session.query(BrewRecipes).all()
         for recipe in recipes_all:
-            print(f'Recipe: {recipe.name}, {recipe.method}, {recipe.coffee.name}, {recipe.grinder.name}')
+            print(f'Recipe: {recipe.name}, {recipe.method}, {recipe.coffee.name}'
+                  f'{recipe.grinder.name}')
 
 def show_coffees():
     '''This function prints all the coffees in the database.'''
@@ -144,7 +145,8 @@ def show_coffees():
             print(f'Coffee: {coffee.name}, {coffee.price}, {coffee.farmer}')
             print(f'Brew recipes: ')
             for recipe in coffee.brew_recipes:
-                print(f'{recipe.name}, {recipe.method}, {recipe.coffee.name}, {recipe.grinder.name}')
+                print(f'{recipe.name}, {recipe.method}, {recipe.coffee.name}'
+                      f'{recipe.grinder.name}')
 
 if __name__ == '__main__':
     show_recipes()
