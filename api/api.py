@@ -6,8 +6,10 @@ from typing import List
 from flask import Flask, request, jsonify
 from products import inventory as inv
 from products import inventory_objects
+from .api_database import database, models
 
-# logger
+
+# logger TODO: change to app.logger
 LEVEL = logging.DEBUG
 FORMAT = '[%(levelname)s] %(asctime)s %(name)s: %(message)s'
 # handlers = [logging.StreamHandler()]
@@ -15,6 +17,8 @@ logging.basicConfig(level=LEVEL, format=FORMAT) #, handlers=handlers)
 # logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+models.Base.metadata.create_all(bind=database.engine)
+
 inventory: List[inventory_objects.Coffee]= []
 inventory.append(inv.testCoffee1)
 inventory.append(inv.testCoffee2)
@@ -29,6 +33,20 @@ recipes: List[inventory_objects.Recipe] = []
 recipes.append(inv.aeropress)
 recipes.append(inv.v60)
 
+
+@app.before_request
+def create_session():
+    '''creates a session before every request'''
+    request.session = database.Sessionlocal()
+
+@app.teardown_request
+def shutdown_session(exception=None):
+    '''closes the session after every request'''
+    if exception:
+        logging.error(exception)
+    request.session.close()
+
+
 # my Coffee section
 @app.route('/api/coffees', methods=['POST', 'GET'])
 def add_coffee():
@@ -36,41 +54,35 @@ def add_coffee():
     '''
     if request.method == 'POST':
         coffee_data = request.get_json()
-        inventory.append(inventory_objects.Coffee.from_json(coffee_data))
-        logging.debug('type %s added', type(inventory_objects.Coffee
-                                            .from_json(coffee_data)).__name__)
+        request.session.add(models.CoffeeDB.from_json(coffee_data))
+        request.session.commit()
         return 'Coffee added', 200
-    elif request.method == 'GET':
-        # logging.debug([ob.convert_to_json() for ob in inventory])
-        return [ob.convert_to_json() for ob in inventory], 200
-
+    if request.method == 'GET':
+        coffees_all = request.session.query(models.CoffeeDB).all()
+        logging.debug([ob.convert_to_json() for ob in coffees_all])
+        return [ob.convert_to_json() for ob in coffees_all], 200
 
 @app.route('/api/coffees/<coffee_name>', methods=['DELETE'])
 def delete_coffee(coffee_name):
     '''deletes a coffee from the inventory
     '''
-    global inventory
-    inventory = [
-        coffee for coffee in inventory if coffee.name != coffee_name]
+    request.session.query(models.CoffeeDB).filter(models.CoffeeDB.name == coffee_name).delete()
+    request.session.commit()
     logging.debug('coffee %s deleted', coffee_name)
     return jsonify({"message": "Coffee {coffee_name} deleted successfully."}), 200
-
 
 @app.route('/api/coffees/<coffee_name>', methods=['PUT'])
 def update_coffee(coffee_name):
     '''updates a coffee in the inventory
     '''
-    coffee_index = find_coffee_by_name(coffee_name)
-    newCoffee = request.get_json()
-    logging.debug('updated Coffee = %s', newCoffee)
-    inventory[coffee_index] = inventory_objects.Coffee.from_json(newCoffee)
+    new_attribute = request.get_json()
+    logging.debug('updated Attribute = %s of Coffee: %s', new_attribute, coffee_name)
+    request.session.query(models.CoffeeDB)\
+        .filter(models.CoffeeDB.name == coffee_name)\
+        .update(new_attribute)
+    request.session.commit()
+    # inventory[coffee_index] = inventory_objects.Coffee.from_json(newCoffee)
     return jsonify({"message": "Coffee updated successfully."}), 200
-
-
-def find_coffee_by_name(name):
-    '''returns the index of a coffee by name'''
-    for i, c in enumerate(inventory):
-        return i if(c.name is name) else -1
 
 
 # brew section
@@ -80,13 +92,14 @@ def add_grinder():
     '''adds a new grinder to the inventory or returns the inventory'''
     if request.method == 'POST':
         grinder_data = request.get_json()
-        grinders.append(inventory_objects.Grinder.from_json(grinder_data))
-        logging.debug('type %s added', type(inventory_objects.Grinder
+        grinders.append(models.GrinderDB.from_json(grinder_data))
+        logging.debug('type %s added', type(models.GrinderDB
                                             .from_json(grinder_data)).__name__)
         return 'Grinder added', 200
     elif request.method == 'GET':
-        logging.debug(grinders)
-        return [ob.convert_to_json() for ob in grinders], 200
+        grinders_all = request.session.query(models.GrinderDB).all()
+        logging.debug([ob.convert_to_json() for ob in grinders_all])
+        return [ob.convert_to_json() for ob in grinders_all], 200
 
 
 @app.route('/api/grinders/<grinder_name>', methods=['DELETE'])
