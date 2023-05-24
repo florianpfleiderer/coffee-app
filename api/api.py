@@ -9,9 +9,7 @@ from .api_database import database, models
 # logger TODO: change to app.logger
 LEVEL = logging.DEBUG
 FORMAT = '[%(levelname)s] %(asctime)s %(name)s: %(message)s'
-# handlers = [logging.StreamHandler()]
-logging.basicConfig(level=LEVEL, format=FORMAT) #, handlers=handlers)
-# logger = logging.getLogger(__name__)
+logging.basicConfig(level=LEVEL, format=FORMAT)
 
 app = Flask(__name__)
 models.Base.metadata.create_all(bind=database.engine)
