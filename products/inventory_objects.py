@@ -136,7 +136,10 @@ class Recipe(InventoryObjects):
         self.grinder = grinder
         self.water = water
         self.coffeeIn = coffeeIn
-        self.ratio = ratio
+        if(self.water != 0 and self.coffeeIn != 0):
+            self.ratio = self.water / self.coffeeIn
+        else:
+            self.ratio = ratio
         self.temp = temp
         self.totalTime = totalTime
         self.Pour1stTime = Pour1stTime

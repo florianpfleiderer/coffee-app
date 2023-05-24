@@ -19,26 +19,22 @@ function Brew() {
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
     const [totalTime, setTotalTime] = useState(0); // Maximum time in seconds
-    const [Pour1stTime, set1stPourTime] = useState(0); // Time for the first pour
-    const [Pour2ndTime, set2ndPourTime] = useState(0); // Time for the second pour
-    const [is1stPourDone, setIs1stPourDone] = useState(false); // Boolean to check if the first pour is done
-    const [is2ndPourDone, setIs2ndPourDone] = useState(false); // Boolean to check if the second pour is done
+    const [time1, setTime1] = useState(0); // Time for the first pour
+    const [time2, setTime2] = useState(0); // Time for the second pour
+    const [isTime1up, setIsTime1up] = useState(false);
+    const [isTime2up, setIsTime2up] = useState(false);
     const [isTimeUp, setIsTimeUp] = useState(false);
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     const [totalTimeInput, setTotalTimeInput] = useState("");
-    const [Pour1stTimeInput, set1stPourTimeInput] = useState("");
-    const [Pour2ndTimeInput, set2ndPourTimeInput] = useState("");
-    const [WaterInput, setWaterInput] = useState("");
-    const [CoffeeInInput, setCoffeeInInput] = useState("");
-    const [TempInput, setTempInput] = useState("");
-    const [editAttribute, setEditAttribute] = useState('');
-    const [RecipeNameInput, setRecipeNameInput] = useState("");
+    const [time1Input, setTime1Input] = useState("");
+    const [time2Input, setTime2Input] = useState("");
+    const [waterInput, setWaterInput] = useState("");
+    const [coffeeInInput, setCoffeeInInput] = useState("");
+    const [tempInput, setTempInput] = useState("");
+    const [recipeNameInput, setRecipeNameInput] = useState("");
 
 
-
-
-    
 
     const fetchGrinders = () => {
         axios
@@ -107,26 +103,6 @@ function Brew() {
         }
     }
 
-    const find_recipe_by_name = (name) => {
-        fetchRecipes();
-        for (let i = 0; i < inventoryRecipes.length; i++) {
-            if (inventoryRecipes[i].name === name) {
-                return inventoryRecipes[i];
-            }
-        }
-    }
-
-    // const calculateRatio = () => {
-    //     if (WaterInput != 0 && CoffeeInInput != 0 && (WaterInput / CoffeeInInput) != 0) {
-    //         selectedRecipe.ratio = WaterInput / CoffeeInInput;
-    //     } else {
-    //         selectedRecipe.ratio = 0;
-    //     }
-    // }
-
-
-
-
 
 
     //Timer
@@ -137,17 +113,17 @@ function Brew() {
           interval = setInterval(() => {
             setTime(prevTime => prevTime + 1);
           }, 1000);
-          if(time === Pour1stTime) {
-            setIs1stPourDone(true);
+          if(time === time1) {
+            setIsTime1up(true);
           }
-          if(time === Pour1stTime + 5) {
-            setIs1stPourDone(false);
+          if(time === time1 + 5) {
+            setIsTime1up(false);
           }
-          if(time === Pour2ndTime) {
-            setIs2ndPourDone(true);
+          if(time === time2) {
+            setIsTime2up(true);
           }
-          if(time === Pour2ndTime + 5) {
-            setIs2ndPourDone(false);
+          if(time === time2 + 5) {
+            setIsTime2up(false);
           }
         } else {
         // } else if (isRunning && time >= totalTime) {
@@ -156,7 +132,7 @@ function Brew() {
           clearInterval(interval);
         }
         return () => clearInterval(interval);
-    }, [isRunning, time, totalTime, Pour1stTime, Pour2ndTime]);
+    }, [isRunning, time, totalTime, time1, time2]);
 
      //if choose BrewGuide
     const handleRecipeRowClick = (recipe) => {
@@ -165,12 +141,15 @@ function Brew() {
         setSelectedCoffee(find_coffee_by_name(recipe.coffee));
         setRecipeNameInput(recipe.name);
         setWaterInput(recipe.water);
-        setCoffeeInInput(recipe.coffeeIn);
-        //calculateRatio();
+        setCoffeeInInput(recipe.coffee_In);
+        setTime(0);
         setTempInput(recipe.temp);
         setTotalTimeInput(recipe.totalTime);
-        set1stPourTimeInput(recipe.Pour1stTime);
-        set2ndPourTimeInput(recipe.Pour2ndTime);
+        setTotalTime(recipe.totalTime);
+        setTime1Input(recipe.time1);
+        setTime1(recipe.time1);
+        setTime2Input(recipe.time2);
+        setTime2(recipe.time2);
         setshowCoffeSelection(false);
         setshowGrinderSelection(false);
         setshowRecipeSelection(false);
@@ -183,7 +162,7 @@ function Brew() {
         setshowCoffeSelection(false);
         setshowRecipeSelection(false);
         setshowBrewGuide(true);
-        handleSaveClick();
+        handleSubmit();
       }
       //choose Coffee
       const handleCoffeeRowClick = (coffee) => {
@@ -192,15 +171,14 @@ function Brew() {
         setshowCoffeSelection(false);
         setshowRecipeSelection(false);
         setshowBrewGuide(true);
-        handleSaveClick();
+        handleSubmit();
       }
 
     const handleBackClick = () => {
         fetchCoffees();
         fetchGrinders();
         fetchRecipes();
-        
-          
+
         setSelectedCoffee("Choose a Coffee");
         setSelectedGrinder("Choose a Grinder");
         setSelectedRecipe(null);
@@ -211,16 +189,16 @@ function Brew() {
         setTime(0);
         setIsRunning(false);
         setIsTimeUp(false);
-        setIs1stPourDone(false);
-        setIs2ndPourDone(false);
+        setIsTime1up(false);
+        setIsTime2up(false);
     };
 
     const handleStart = () => {
         if(time === totalTime) {setTime(0);}
         setIsRunning(true);
         setIsTimeUp(false);
-        setIs1stPourDone(false);
-        setIs2ndPourDone(false);
+        setIsTime1up(false);
+        setIsTime2up(false);
       };
     
       const handleStop = () => {
@@ -231,49 +209,98 @@ function Brew() {
         setTime(0);
         setIsRunning(false);
         setIsTimeUp(false);
-        setIs1stPourDone(false);
-        setIs2ndPourDone(false);
+        setIsTime1up(false);
+        setIsTime2up(false);
       };
 
-      const handleTimeSubmit = (e) => {
+
+      const handleSubmit = () => {
+        // e.preventDefault();
+        const updatedRecipe = {
+            name: recipeNameInput,
+            water: waterInput,
+            coffee_In: coffeeInInput,
+            temp: tempInput,
+            totalTime: totalTimeInput,
+            time1: time1Input,
+            time2: time2Input,
+            grinder_id: selectedGrinder.name,
+            coffee_id: selectedCoffee.name,
+
+        };
+        axios.put(`/api/recipes/${selectedRecipe.name}`, updatedRecipe)
+        .then((response) => {
+            fetchRecipes();
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    };
+
+    const handletotalTimeSubmit = (e) => {
         e.preventDefault();
         setTotalTime(parseInt(totalTimeInput));
-        set1stPourTime(parseInt(Pour1stTimeInput));
-        set2ndPourTime(parseInt(Pour2ndTimeInput));
+        setTime1(parseInt(time1Input));
+        setTime2(parseInt(time2Input));
         setTime(0);
         setIsRunning(false);
         setIsTimeUp(false);
-        setIs1stPourDone(false);
-        setIs2ndPourDone(false);
-        handleSaveClick();
-      };
+        setIsTime1up(false);
+        setIsTime2up(false);
+        handleSubmit('totalTime');
+    };
+
+    const handleTime1Submit = (e) => {
+        e.preventDefault();
+        setTotalTime(parseInt(totalTimeInput));
+        setTime1(parseInt(time1Input));
+        setTime2(parseInt(time2Input));
+        setTime(0);
+        setIsRunning(false);
+        setIsTimeUp(false);
+        setIsTime1up(false);
+        setIsTime2up(false);
+        handleSubmit('time1');
+    };
+
+    const handleTime2Submit = (e) => {
+        e.preventDefault();
+        setTotalTime(parseInt(totalTimeInput));
+        setTime1(parseInt(time1Input));
+        setTime2(parseInt(time2Input));
+        setTime(0);
+        setIsRunning(false);
+        setIsTimeUp(false);
+        setIsTime1up(false);
+        setIsTime2up(false);
+        handleSubmit('time2');
+    };
+
 
         const handleWaterSubmit = (e) => {
         e.preventDefault();
-        setWaterInput(parseInt(WaterInput));
-        //calculateRatio();
-        handleSaveClick();
+        setWaterInput(parseInt(waterInput));
+        handleSubmit('water');
         };
 
         const handleCoffeeInSubmit = (e) => {
         e.preventDefault();
-        setCoffeeInInput(parseInt(CoffeeInInput));
-        // calculateRatio();
-        handleSaveClick();
+        setCoffeeInInput(parseInt(coffeeInInput));
+        handleSubmit('coffee_In');
         };
 
         const handleTempSubmit = (e) => {
         e.preventDefault();
-        setTempInput(parseInt(TempInput));
-        handleSaveClick();
+        setTempInput(parseInt(tempInput));
+        handleSubmit('temp');
         };
 
 
 
         const handleNameSubmit = (e) => {
         e.preventDefault();
-        setRecipeNameInput(RecipeNameInput);
-        handleSaveClick();
+        setRecipeNameInput(recipeNameInput);
+        handleSubmit('name');
         };
 
 
@@ -291,29 +318,6 @@ function Brew() {
                 setshowRecipeSelection(false);
                 setshowBrewGuide(false);
             }
-        };
-
-        //saves the edited grinder/coffee to the api
-        const handleSaveClick = () => {
-            const updatedRecipe = { ...selectedRecipe };
-            updatedRecipe.name = RecipeNameInput;
-            updatedRecipe.grinder = selectedGrinder.name;
-            updatedRecipe.coffee = selectedCoffee.name;
-            updatedRecipe.water = WaterInput;
-            updatedRecipe.coffeeIn = CoffeeInInput;
-            updatedRecipe.temp = TempInput;
-            updatedRecipe.totalTime = totalTimeInput;
-            updatedRecipe.Pour1stTime = Pour1stTimeInput;
-            updatedRecipe.Pour2ndTime = Pour2ndTimeInput;
-            axios.put('api/recipes/' + selectedRecipe.name, updatedRecipe)
-            .then((response) => {
-                fetchRecipes();
-                
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
         };
 
         const handleAddRecipe = () => {
@@ -426,7 +430,7 @@ function Brew() {
                                 <td>{recipe.name}</td>
                                 <td>{recipe.grinder}</td>
                                 <td>{recipe.coffee}</td>
-                                <td>1:{recipe.ratio}</td>
+                                <td>1:{recipe.water / recipe.coffee_In}</td>
                                 <td>{recipe.water}</td>
                                 <td>{recipe.totalTime}</td>
                             </tr>
@@ -456,7 +460,7 @@ function Brew() {
                                 <label>
                                 <input
                                     type="text"
-                                    value={RecipeNameInput}
+                                    value={recipeNameInput}
                                     onChange={(e) => setRecipeNameInput(e.target.value)}
                                 />
                                 </label>
@@ -475,7 +479,7 @@ function Brew() {
                     </tr>
                     <tr>
                         <th>Ratio:</th>
-                        <td>{selectedRecipe.ratio}</td>
+                        <td>1:{selectedRecipe.water / selectedRecipe.coffee_In}</td>
                     </tr>
                     <tr key={selectedRecipe.water}>
                         <th>Water:</th>
@@ -484,7 +488,7 @@ function Brew() {
                                 <label>
                                 <input
                                     type="text"
-                                    value={WaterInput}
+                                    value={waterInput}
                                     onChange={(e) => setWaterInput(e.target.value)}
                                 />
                                 </label>
@@ -492,14 +496,14 @@ function Brew() {
                             </form>
                         </td>
                     </tr>
-                    <tr key={selectedRecipe.coffeeIn}>
+                    <tr key={selectedRecipe.coffee_In}>
                         <th>Coffee in g:</th>
                         <td>
                             <form onSubmit={handleCoffeeInSubmit}>
                                 <label>
                                 <input
                                     type="text"
-                                    value={CoffeeInInput}
+                                    value={coffeeInInput}
                                     onChange={(e) => setCoffeeInInput(e.target.value)}
                                 />
                                 </label>
@@ -514,7 +518,7 @@ function Brew() {
                                 <label>
                                 <input
                                     type="text"
-                                    value={TempInput}
+                                    value={tempInput}
                                     onChange={(e) => setTempInput(e.target.value)}
                                 />
                                 </label>
@@ -525,7 +529,7 @@ function Brew() {
                     <tr>
                         <th>Total time:</th>
                         <td>
-                            <form onSubmit={handleTimeSubmit}>
+                            <form onSubmit={handletotalTimeSubmit}>
                                 <label>
                                 <input
                                     type="text"
@@ -540,12 +544,12 @@ function Brew() {
                     <tr>
                         <th>1st Pour:</th>
                         <td>
-                            <form onSubmit={handleTimeSubmit}>
+                            <form onSubmit={handleTime1Submit}>
                                 <label>
                                 <input
                                     type="text"
-                                    value={Pour1stTimeInput}
-                                    onChange={(e) => set1stPourTimeInput(e.target.value)}
+                                    value={time1Input}
+                                    onChange={(e) => setTime1Input(e.target.value)}
                                 />
                                 </label>
                                 <input type="submit" value="Update" />
@@ -555,12 +559,12 @@ function Brew() {
                     <tr>
                         <th>2nd Pour:</th>
                         <td>
-                            <form onSubmit={handleTimeSubmit}>
+                            <form onSubmit={handleTime2Submit}>
                                 <label>
                                 <input
                                     type="text"
-                                    value={Pour2ndTimeInput}
-                                    onChange={(e) => set2ndPourTimeInput(e.target.value)}
+                                    value={time2Input}
+                                    onChange={(e) => setTime2Input(e.target.value)}
                                 />
                                 </label>
                                 <input type="submit" value="Update" />
@@ -578,8 +582,8 @@ function Brew() {
                       {minutes}:{seconds < 10 ? '0' : ''}{seconds}
                     </h1>
                     {isTimeUp && <p>Enjoy your coffee!</p>}
-                    {is1stPourDone && <p>End of 1st Pour</p>}
-                    {is2ndPourDone && <p>End of 2nd Pour</p>}
+                    {isTime1up && <p>End of 1st Pour</p>}
+                    {isTime2up && <p>End of 2nd Pour</p>}
                   </div>
                 </div>
               </div>
@@ -592,7 +596,7 @@ function Brew() {
               </buttonRow>
               <buttonRow>
                 <brewButton onClick={handleBackClick}>Back</brewButton>
-                <brewButton onClick={handleSaveClick}>Save</brewButton>
+                <brewButton onClick={handleSubmit}>Save</brewButton>
               </buttonRow>
             </div>
           </div>
