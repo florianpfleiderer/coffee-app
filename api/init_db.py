@@ -11,14 +11,14 @@ testCoffee2 = models.CoffeeDB(name='testCoffee2', price=14, farmer='Max')
 coffees = [testCoffee1, testCoffee2]
 
 fellowOde = models.GrinderDB(name='Fellow ode', burr='sspRedSpeed', price=350)
-wilfaUniform = models.GrinderDB(name='Wilfa Uniform', burr='Wilfa Standard Burrs', price='250')
+wilfaUniform = models.GrinderDB(name='Wilfa Uniform', burr='Wilfa Standard Burrs', price=250)
 grinders = [fellowOde, wilfaUniform]
 
-recipeV60 = models.BrewRecipes(name='V60', method='pour over', coffee=testCoffee1,
+recipeV60 = models.RecipeDB(name='V60', water=250, totalTime=180, coffee_In=15, coffee=testCoffee1,
                         grinder=fellowOde)
-recipeAeropress = models.BrewRecipes(name='Aeropress', method='immersion', coffee=testCoffee2,
+recipeAeropress = models.RecipeDB(name='Aeropress', water=200, totalTime=150, coffee_In=12, coffee=testCoffee2,
                             grinder=wilfaUniform)
-recipeSpecial = models.BrewRecipes(name='Special', method='special', coffee=testCoffee2,
+recipeSpecial = models.RecipeDB(name='Special', water=300, totalTime=280, coffee_In=14, coffee=testCoffee2,
                             grinder=fellowOde)
 recipes = [recipeV60, recipeAeropress, recipeSpecial]
 
@@ -45,9 +45,8 @@ with database.Sessionlocal() as session:
 
     for recipe in recipes:
         existing_recipes = (
-            session.query(models.BrewRecipes)
-            .filter(models.BrewRecipes.name == recipe.name)
-            .filter(models.BrewRecipes.method == recipe.method)
+            session.query(models.RecipeDB)
+            .filter(models.RecipeDB.name == recipe.name)
             .first()
         )
         if existing_recipes is None:
@@ -59,12 +58,12 @@ if __name__ == '__main__':
     with database.Sessionlocal() as session:
         coffees_all = session.query(models.CoffeeDB).all()
         for coffee in coffees_all:
-            print(f'Coffee: {coffee.name}, {coffee.price}, {coffee.farmer}')
-            print(f'Brew recipes: ')
+            print(f'\nCoffee:\n{coffee.name}, {coffee.price}, {coffee.farmer}')
+            print('Brew recipes:')
             for recipe in coffee.brew_recipes:
-                print(f'{recipe.name}, {recipe.method}, {recipe.coffee.name}'
-                    f'{recipe.grinder.name}')
-        recipes_all = session.query(models.BrewRecipes).all()
+                print(f'{recipe.name}, {recipe.coffee.name}, {recipe.grinder.name}')
+
+        recipes_all = session.query(models.RecipeDB).all()
+        print('\n')
         for recipe in recipes_all:
-            print(f'Recipe: {recipe.name}, {recipe.method}, {recipe.coffee.name}'
-                f'{recipe.grinder.name}')
+            print(f'Recipe:{recipe.name}, {recipe.coffee.name}, {recipe.grinder.name}')

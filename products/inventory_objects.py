@@ -3,7 +3,7 @@
 it contains the Methods used in all Inventory objects
 '''
 
-class InventoryObjects:
+class InventoryObjects():
     """represents an Inventory Object
 
     Args:
@@ -60,23 +60,6 @@ class Coffee(InventoryObjects):
         self.farmer = farmer
         self.size = size
         self.price = price
-
-    def getPrice_perKilo(self):
-        '''returns the price per Kilo to compare different beans
-        
-        takes size and price to calculate price per kilo
-
-        Args:
-            self
-
-        Returns:
-            price_perKilo (float): the price per Kilo
-
-        Raises:
-            -
-        '''
-
-        return self.price / (self.size * 0.1)
 
     def __str__(self):
         return f'{self.name} costs {self.price}€'
@@ -153,12 +136,14 @@ class Recipe(InventoryObjects):
         self.grinder = grinder
         self.water = water
         self.coffeeIn = coffeeIn
-        self.ratio = ratio
+        if(self.water != 0 and self.coffeeIn != 0):
+            self.ratio = self.water / self.coffeeIn
+        else:
+            self.ratio = ratio
         self.temp = temp
         self.totalTime = totalTime
         self.Pour1stTime = Pour1stTime
         self.Pour2ndTime = Pour2ndTime
-
 
     def __str__(self):
         return f'{self.name} costs {self.price}€'

@@ -12,8 +12,8 @@ function EditDialog({ coffee, attribute }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         // Update the selected coffee's attribute with the new value
-        const updatedCoffee = {
-            ...coffee, [attribute]: value,
+        const updatedAttribute = {
+            [attribute]: value,
         };
         // Make a PUT request to the Flask backend to update the coffee's attribute in the inventory list
         fetch(`/api/coffees/${coffee.name}`, {
@@ -21,7 +21,7 @@ function EditDialog({ coffee, attribute }) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(updatedCoffee),
+            body: JSON.stringify(updatedAttribute),
         })
             .then((response) => {
                 if (!response.ok) {
