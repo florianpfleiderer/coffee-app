@@ -4,8 +4,6 @@
 import logging
 from typing import List
 from flask import Flask, request, jsonify
-from products import inventory as inv
-from products import inventory_objects
 from .api_database import database, models
 
 
@@ -19,19 +17,6 @@ logging.basicConfig(level=LEVEL, format=FORMAT) #, handlers=handlers)
 app = Flask(__name__)
 models.Base.metadata.create_all(bind=database.engine)
 
-inventory: List[inventory_objects.Coffee]= []
-inventory.append(inv.testCoffee1)
-inventory.append(inv.testCoffee2)
-inventory.append(inv.chooseCoffee)
-
-grinders: List[inventory_objects.Grinder] = []
-grinders.append(inv.fellowOde)
-grinders.append(inv.wilfaUniform)
-grinders.append(inv.chooseGrinder)
-
-recipes: List[inventory_objects.Recipe] = []
-recipes.append(inv.aeropress)
-recipes.append(inv.v60)
 
 
 @app.before_request
@@ -92,9 +77,8 @@ def add_grinder():
     '''adds a new grinder to the inventory or returns the inventory'''
     if request.method == 'POST':
         grinder_data = request.get_json()
-        grinders.append(models.GrinderDB.from_json(grinder_data))
-        logging.debug('type %s added', type(models.GrinderDB
-                                            .from_json(grinder_data)).__name__)
+        request.session.add(models.GrinderDB.from_json(grinder_data))
+        request.session.commit()
         return 'Grinder added', 200
     elif request.method == 'GET':
         grinders_all = request.session.query(models.GrinderDB).all()
@@ -105,9 +89,8 @@ def add_grinder():
 @app.route('/api/grinders/<grinder_name>', methods=['DELETE'])
 def delete_grinder(grinder_name):
     '''deletes a grinder from the inventory'''
-    global grinders
-    grinders = [
-        grinder for grinder in grinders if grinder.name != grinder_name]
+    request.session.query(models.GrinderDB).filter(models.GrinderDB.name == grinder_name).delete()
+    request.session.commit()
     logging.debug('grinder %s deleted', grinder_name)
     return jsonify({"message": "Grinder {grinder_name} deleted successfully."}), 200
 
@@ -115,16 +98,14 @@ def delete_grinder(grinder_name):
 @app.route('/api/grinders/<grinder_name>', methods=['PUT'])
 def update_grinder(grinder_name):
     '''updates a grinder in the inventory'''
-    grinder_index = find_grinder_by_name(grinder_name)
-    newGrinder = request.get_json()
-    logging.debug('updated Grinder = %s', newGrinder)
-    grinders[grinder_index] = inventory_objects.Grinder.from_json(newGrinder)
+    new_attribute = request.get_json()
+    logging.debug('updated Attribute = %s of Grinder: %s', new_attribute, grinder_name)
+    request.session.query(models.GrinderDB)\
+        .filter(models.GrinderDB.name == grinder_name)\
+        .update(new_attribute)
+    request.session.commit()
+    # inventory[coffee_index] = inventory_objects.Coffee.from_json(newCoffee)
     return jsonify({"message": "Grinder updated successfully."}), 200
-
-def find_grinder_by_name(name):
-    '''returns the index of a grinder by name'''
-    for i, c in enumerate(grinders):
-        return i if(c.name is name) else -1
 
 
 # brewrecipes
@@ -133,33 +114,50 @@ def add_recipe():
     '''adds a new recipe to the inventory or returns the inventory'''
     if request.method == 'POST':
         recipe_data = request.get_json()
-        recipes.append(inventory_objects.Recipe.from_json(recipe_data))
-        logging.debug('type %s added', type(inventory_objects.Recipe
-                                            .from_json(recipe_data)).__name__)
+        request.session.add(models.RecipeDB.from_json(recipe_data))
+        request.session.commit()
         return 'Recipe added', 200
     elif request.method == 'GET':
-        #logging.debug(recipes)
-        return [ob.convert_to_json() for ob in recipes], 200
+        recipes_all = request.session.query(models.RecipeDB).all()
+        logging.debug([ob.convert_to_json() for ob in recipes_all])
+        return [ob.convert_to_json() for ob in recipes_all], 200
 
 @app.route('/api/recipes/<recipe_name>', methods=['DELETE'])
 def delete_recipe(recipe_name):
     '''deletes a recipe from the inventory'''
-    global recipes
-    recipes = [
-        recipe for recipe in recipes if recipe.name != recipe_name]
+    request.session.query(models.RecipeDB).filter(models.RecipeDB.name == recipe_name).delete()
+    request.session.commit()
     logging.debug('recipe %s deleted', recipe_name)
     return jsonify({"message": "Recipe {recipe_name} deleted successfully."}), 200
+
+
 
 @app.route('/api/recipes/<recipe_name>', methods=['PUT'])
 def update_recipe(recipe_name):
     '''updates a recipe in the inventory'''
-    recipe_index = find_recipe_by_name(recipe_name)
-    newRecipe = request.get_json()
-    logging.debug('updated Recipe = %s', newRecipe)
-    recipes[recipe_index] = inventory_objects.Recipe.from_json(newRecipe)
+    new_attribute = request.get_json()
+    logging.debug('updated Attribute = %s of Recipe: %s', new_attribute, recipe_name)
+    # request.session.query(models.RecipeDB)\
+    #     .filter(models.RecipeDB.name == recipe_name)\
+    #     .update(new_attribute)
+    logging.debug('new_Atribute ubernommen')
+    updatedcCoffee = request.session.query(models.CoffeeDB).filter(models.CoffeeDB.name == new_attribute['coffee_id']).first()
+    logging.debug('updated coffee = %s', updatedcCoffee)
+    updatedGrinder = request.session.query(models.GrinderDB).filter(models.GrinderDB.name == new_attribute['grinder_id']).first()
+    logging.debug('updated grinder = %s', updatedGrinder)
+    new_attribute['coffee_id'] = updatedcCoffee.id
+    new_attribute['grinder_id'] = updatedGrinder.id
+
+    logging.debug('updated Attribute = %s of Recipe: %s', new_attribute, recipe_name)
+
+    request.session.query(models.RecipeDB)\
+        .filter(models.RecipeDB.name == recipe_name)\
+        .update(new_attribute)
+    logging.debug('updated recipe = %s', request.session.query(models.RecipeDB).filter(models.RecipeDB.name == recipe_name).first())
+    logging.debug('updating cmplete')
+
+    request.session.commit()
+    # inventory[coffee_index] = inventory_objects.Coffee.from_json(newCoffee)
     return jsonify({"message": "Recipe updated successfully."}), 200
 
-def find_recipe_by_name(name):
-    '''returns the index of a recipe by name'''
-    for i, c in enumerate(recipes):
-        return i if(c.name is name) else -1
+

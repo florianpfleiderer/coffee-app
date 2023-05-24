@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 
 function EditDialog({ coffee, attribute }) {
@@ -14,22 +15,35 @@ function EditDialog({ coffee, attribute }) {
             ...coffee, [attribute]: value,
         };
         // Make a PUT request to the Flask backend to update the coffee's attribute in the inventory list
-        fetch(`/api/coffees/${coffee.name}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedCoffee),
-        })
-            .then((response) => {
+        axios.put(`/api/coffees/${coffee.name}`, updatedCoffee)
+            .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 coffee.onClose();
             })
-            .catch((error) => {
-                console.error('Error:', error);
+            .catch(error => {
+                console.error(error);
             });
+        
+
+
+        // fetch(`/api/coffees/${coffee.name}`, {
+        //     method: 'PUT',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(updatedCoffee),
+        // })
+        //     .then((response) => {
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //         coffee.onClose();
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error:', error);
+        //     });
         setValue('')
     };
 
