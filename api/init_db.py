@@ -58,10 +58,12 @@ if __name__ == '__main__':
     with database.Sessionlocal() as session:
         coffees_all = session.query(models.CoffeeDB).all()
         for coffee in coffees_all:
-            print(f'Coffee: {coffee.name}, {coffee.price}, {coffee.farmer}')
-            print(f'Brew recipes: ')
+            print(f'\nCoffee:\n{coffee.name}, {coffee.price}, {coffee.farmer}')
+            print('Brew recipes:')
             for recipe in coffee.brew_recipes:
                 print(f'{recipe.name}, {recipe.coffee.name}, {recipe.grinder.name}')
+
         recipes_all = session.query(models.RecipeDB).all()
+        print('\n')
         for recipe in recipes_all:
-            print(f'Recipe: {recipe.name}, {recipe.coffee.name}, {recipe.grinder.name}')
+            print(f'Recipe:{recipe.name}, {recipe.coffee.name}, {recipe.grinder.name}')
