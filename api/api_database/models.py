@@ -50,7 +50,6 @@ class CoffeeDB(Base, InventoryObject):
     process = Column(String, nullable=True)
     roast = Column(String, nullable=True)
     size = Column(Integer, nullable=True)
-    # TODO add a one to many relationship with RecipeDB
     brew_recipes = relationship('RecipeDB', back_populates='coffee')
 
     def convert_to_json(self):
@@ -90,8 +89,6 @@ class GrinderDB(Base, InventoryObject):
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     burr = Column(String, nullable=False)
-    # TODO add rest of the attributes
-    # TODO add a one to many relationsship with RecipeDB
     brew_recipes = relationship('RecipeDB', back_populates='grinder')
 
     def convert_to_json(self):
@@ -141,10 +138,6 @@ class RecipeDB(Base, InventoryObject):
     grinder_id = Column(Integer, ForeignKey('grinders.id'), nullable=False)
     coffee = relationship('CoffeeDB', back_populates='brew_recipes')
     grinder = relationship('GrinderDB', back_populates='brew_recipes')
-    
-    # TODO add a backpopulated relationship with CoffeeDB and GrinderDB for recipes
-    # TODO how to add the recipe itself (a script that declares the
-    # duration, stops, etc to be executed by the BrewSection when loaded?)
 
     def convert_to_json(self):
         '''converts the object to a json object

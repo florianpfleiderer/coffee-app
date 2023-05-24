@@ -2,7 +2,6 @@
 '''
 
 import logging
-from typing import List
 from flask import Flask, request, jsonify
 from .api_database import database, models
 
@@ -137,27 +136,23 @@ def update_recipe(recipe_name):
     '''updates a recipe in the inventory'''
     new_attribute = request.get_json()
     logging.debug('updated Attribute = %s of Recipe: %s', new_attribute, recipe_name)
-    # request.session.query(models.RecipeDB)\
-    #     .filter(models.RecipeDB.name == recipe_name)\
-    #     .update(new_attribute)
-    logging.debug('new_Atribute ubernommen')
-    updatedcCoffee = request.session.query(models.CoffeeDB).filter(models.CoffeeDB.name == new_attribute['coffee_id']).first()
-    logging.debug('updated coffee = %s', updatedcCoffee)
-    updatedGrinder = request.session.query(models.GrinderDB).filter(models.GrinderDB.name == new_attribute['grinder_id']).first()
-    logging.debug('updated grinder = %s', updatedGrinder)
-    new_attribute['coffee_id'] = updatedcCoffee.id
-    new_attribute['grinder_id'] = updatedGrinder.id
+    updated_coffee = (request.session.query(models.CoffeeDB)\
+                      .filter(models.CoffeeDB.name == new_attribute['coffee_id']).first())
+    logging.debug('updated coffee = %s', updated_coffee)
+    updated_grinder = (request.session.query(models.GrinderDB)\
+                       .filter(models.GrinderDB.name == new_attribute['grinder_id']).first())
+    logging.debug('updated grinder = %s', updated_grinder)
+    new_attribute['coffee_id'] = updated_coffee.id
+    new_attribute['grinder_id'] = updated_grinder.id
 
     logging.debug('updated Attribute = %s of Recipe: %s', new_attribute, recipe_name)
 
     request.session.query(models.RecipeDB)\
         .filter(models.RecipeDB.name == recipe_name)\
         .update(new_attribute)
-    logging.debug('updated recipe = %s', request.session.query(models.RecipeDB).filter(models.RecipeDB.name == recipe_name).first())
-    logging.debug('updating cmplete')
+    logging.debug('updated recipe = %s', request.session.query(models.RecipeDB)\
+                  .filter(models.RecipeDB.name == recipe_name).first())
 
     request.session.commit()
     # inventory[coffee_index] = inventory_objects.Coffee.from_json(newCoffee)
     return jsonify({"message": "Recipe updated successfully."}), 200
-
-
