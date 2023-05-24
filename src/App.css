@@ -19,6 +19,8 @@ footer {
   margin-bottom: 2rem;
 }
 
+
+
 /* button section at the bottom */
 button {
   background-color: #444;
@@ -60,44 +62,44 @@ button:last-of-type {
   margin-right: 0;
 }
 
-button1 {
-  background-color: #444;
-  color: white;
+.back {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f4511e;
   border: none;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-button1:nth-of-type(1) {
-  background-color: #555;
-}
-
-button1:nth-of-type(2) {
-  background-color: #666;
-}
-
-button1:nth-of-type(3) {
-  background-color: #777;
-}
-
-button1:hover {
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 20px;
+  padding: 20px;
+  width: 200px;
+  transition: all 0.5s;
   cursor: pointer;
-  opacity: 0.8;
+  margin: 5px;
 }
 
-/* Custom styles for button1 sizes */
-button1 {
-  width: calc((100% / 3) - 1rem);
-  /* subtract 1rem for spacing */
-  height: 2cm;
-  margin-right: 1rem;
+.back span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
 }
 
-button1:last-of-type {
-  margin-right: 0;
+.back span:after {
+  content: '\00ab';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: -20px;
+  transition: 0.5s;
+}
+
+.back:hover span {
+  padding-left: 25px;
+}
+
+.back:hover span:after {
+  opacity: 1;
+  left: 0;
 }
 
 /* formats for displaying the products */

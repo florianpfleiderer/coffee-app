@@ -1,18 +1,29 @@
-# from products import Burr,Coffee,Grinder
-from products import InventoryObjects
+'''TODO Module docstring
+'''
 
-#Burrs
-# sspRedSpeed = Burr.Burr(name='SSP Red Speed', type='flat', size=64, price=120)
-# sspLabSweet = Burr.Burr(name='SSP Lab Sweet', type='flat', size=64, price=150)
+from products import inventory_objects
 
 #Coffees
-testCoffee1 = InventoryObjects.Coffee(name='testCoffee1', origin='Ethiopia', variety='Arabica', process='Washed', roast='Light', farmer='Max', price=12)
-testCoffee2 = InventoryObjects.Coffee(name='testCoffee2', origin='Colombia', variety='Arabica', process='Natural', roast='Light', farmer='Max', price=12)
-# testCoffee1 = Coffee.Coffee(name='testCoffee1', origin='Ethiopia', variety='Arabica', process='Washed', roast='Light', farmer='Max', price=12)
-# testCoffee2 = Coffee.Coffee(name='testCoffee2', origin='Colombia', variety='Arabica', process='Natural', roast='Light', farmer='Max', price=12)
+chooseCoffee = inventory_objects.Coffee(name='Choose a Coffee', origin='',
+                                       variety='', process='', roast='',
+                                       farmer='', price=0)
+testCoffee1 = inventory_objects.Coffee(name='testCoffee1', origin='Ethiopia',
+                                      variety='Arabica', process='Washed',
+                                      roast='Light', farmer='Max', price=12)
+testCoffee2 = inventory_objects.Coffee(name='testCoffee2', origin='Colombia', 
+                                      variety='Arabica', process='Natural',
+                                      roast='Light', farmer='Max', price=12)
 
 #Grinders
-fellowOde = InventoryObjects.Grinder(name='Fellow ode', burrs='sspRedSpeed', price=350)
-wilfaUniform = InventoryObjects.Grinder(name='Wilfa Uniform', burrs='Wilfa Standard Burrs', price='250')
-# fellowOde = Grinder.Grinder(name='Fellow ode', burrs='sspRedSpeed', price=350)
-# wilfaUniform = Grinder.Grinder(name='Wilfa Uniform', burrs='Wilfa Standard Burrs', price='250')
+chooseGrinder = inventory_objects.Grinder(name='Choose a Grinder', burrs='', price=0)
+fellowOde = inventory_objects.Grinder(name='Fellow ode', burrs='sspRedSpeed', price=350)
+wilfaUniform = inventory_objects.Grinder(name='Wilfa Uniform', 
+                                        burrs='Wilfa Standard Burrs', price='250')
+
+#Recipes
+v60 = inventory_objects.Recipe(name='V60', coffee=testCoffee2.name, grinder=wilfaUniform.name,
+                              water=250, coffeeIn=15, temp=98, totalTime=180,
+                              Pour1stTime=60, Pour2ndTime=120)
+aeropress = inventory_objects.Recipe(name='Aeropress', coffee=testCoffee1.name, 
+                                    grinder=fellowOde.name, water=200, coffeeIn=15,
+                                    temp=97, totalTime=200, Pour1stTime=70, Pour2ndTime=130)
