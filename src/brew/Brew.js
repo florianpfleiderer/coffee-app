@@ -357,7 +357,7 @@ function Brew() {
                         {inventoryGrinders.map((grinder) => (
                             <tr key={grinder.name} onClick={() => handleGrinderRowClick(grinder)}>
                                 <td>{grinder.name}</td>
-                                <td>{grinder.burrs}</td>
+                                <td>{grinder.burr}</td>
                                 <td>{grinder.price}</td>
                             </tr>
                         ))}
