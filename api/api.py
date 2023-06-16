@@ -28,6 +28,11 @@ def shutdown_session(exception=None):
         logging.error(exception)
     request.session.close()
 
+# default route
+@app.route('/', methods=['GET'])
+def default():
+    '''default route'''
+    return 'You have reached the default route for the coffee app api.'
 
 # my Coffee section
 @app.route('/api/coffees', methods=['POST', 'GET'])
