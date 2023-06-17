@@ -4,7 +4,7 @@ services:
   api:
     build: ./api
     ports:
-      - 3000:80
+      - 3001:80
 
   fronend:
     build: .
