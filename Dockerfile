@@ -2,8 +2,10 @@
 FROM node:16-alpine
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
-COPY ./package.json ./yarn.lock ./
+COPY package.json .
+COPY yarn.lock .
 COPY ./src ./src
 COPY ./public ./public
-RUN yarn add axios
+RUN yarn install
+
 CMD ["yarn", "start"]

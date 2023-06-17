@@ -3,7 +3,7 @@
 FROM python:3.9
 WORKDIR /app
 
-COPY . .
+COPY . ./api
 RUN pip install -r ./requirements.txt
 ENV FLASK_ENV production
 EXPOSE 5000
