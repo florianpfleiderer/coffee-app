@@ -1,5 +1,5 @@
 # Build step #1: build the React front end
-FROM node:latest
+FROM node:16-alpine
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json package.json

@@ -6,3 +6,9 @@ services:
     ports:
       - 3000:80
 
+  fronend:
+    build: .
+    ports:
+      - 3000:3000
+    
+
