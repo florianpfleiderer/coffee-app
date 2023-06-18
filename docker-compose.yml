@@ -6,9 +6,7 @@ services:
     ports:
       - 3001:80
 
-  fronend:
+  frontend:
     build: .
     ports:
       - 3000:3000
-    
-
