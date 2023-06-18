@@ -4,7 +4,7 @@ services:
   api:
     build: ./api
     ports:
-      - 3001:80
+      - 80:80
 
   frontend:
     build: .
