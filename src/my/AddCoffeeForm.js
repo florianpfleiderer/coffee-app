@@ -10,7 +10,7 @@ function AddCoffeeForm(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     try {
-      if (name == '' || farmer == '' || price == '') {
+      if (name === '' || farmer === '' || price === '') {
         throw new Error("Failed to add Coffee - fill out all boxes.");
       }
       const coffee = { name, price, farmer };
