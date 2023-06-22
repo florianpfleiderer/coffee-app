@@ -9,6 +9,6 @@ RUN pip install -r ./requirements.txt
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=80
 
-EXPOSE 3001
+EXPOSE 80
 
 CMD ["flask", "run"]
