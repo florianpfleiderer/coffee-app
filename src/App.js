@@ -8,18 +8,18 @@ function MainPage() {
 
   const [showTable, setShowTable] = useState(false);
   const [showBrew, setShowBrew] = useState(false);
-  const [showExplore, setShowExplore] = useState(false);
+  // const [showExplore, setShowExplore] = useState(false);
 
   const toggleTable = () => {
     setShowTable(!showTable);
     setShowBrew(false);
-    setShowExplore(false);
+    // setShowExplore(false);
   }
 
   const toggleBrew = () => {
     setShowBrew(!showBrew);
     setShowTable(false);
-    setShowExplore(false);
+    // setShowExplore(false);
   }
 
   return (
