@@ -37,5 +37,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://api:80"
+  "proxy": "http://api:80",
+  "homepage": "https://florianpfleiderer.github.io"
 }
