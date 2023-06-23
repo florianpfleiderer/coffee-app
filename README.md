@@ -18,6 +18,7 @@ Please run (to install all requirements in your virtual environment):
 
 ## installing Librarys
 ```
+yarn install
 yarn add <name>
 ```
 

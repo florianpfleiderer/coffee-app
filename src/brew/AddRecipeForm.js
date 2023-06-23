@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Brew from './Brew';
+// import Brew from './Brew';
 
 
 function AddRecipeForm(props) {
@@ -14,7 +14,7 @@ function AddRecipeForm(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         try {
-            if (name == '' || water == '' || coffee_In == '' || totalTime == '' || grinder_id == '' || coffee_id == '') {
+            if (name === '' || water === '' || coffee_In === '' || totalTime === '' || grinder_id === '' || coffee_id === '') {
                 throw new Error("Failed to add Recipe - fill out all the boxes.");
             }
             const recipe = {name, water, coffee_In, totalTime, grinder_id, coffee_id};
