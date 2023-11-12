@@ -1,6 +1,8 @@
 # Getting Started with the application
 To run this project in a docker container, go to the projects root folder and follow these commands:
+
 ```docker-compose up```
+
 After this, you should see the containers for frontend and backend up and running in your docker application.
 
 # Getting Started with Create React App
