@@ -1,3 +1,8 @@
+# Dockerfile
+# Created on June 15 2023 by Florian Pfleiderer
+# Copyright (c) MIT License
+
+
 # Install the base requirements for the app.
 # This stage is to support development.
 FROM python:3.9

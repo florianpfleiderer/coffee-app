@@ -1,6 +1,10 @@
-'''This Module contains the models for the tables in the database.
+""" models.py
 
-'''
+Created on March 15 2023 by Florian Pfleiderer
+
+Copyright (c) MIT License
+"""
+
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from .database import Base

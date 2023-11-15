@@ -1,6 +1,9 @@
-'''This Module defines the database connection.
+""" database.py
 
-'''
+Created on March 15 2023 by Florian Pfleiderer
+
+Copyright (c) 2023 MIT License
+"""
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base

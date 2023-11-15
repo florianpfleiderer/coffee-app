@@ -1,5 +1,10 @@
-'''module for the api
-'''
+""" api.py
+
+Created on Wed Nov 15 2023 by Florian Pfleiderer
+
+Copyright (c) MIT License
+"""
+
 
 import logging
 from flask import Flask, request, jsonify

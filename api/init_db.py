@@ -1,4 +1,10 @@
-"""This module contains the classes that represent the database tables.
+""" init_db.py
+
+Created on Wed Nov 15 2023 by Florian Pfleiderer
+
+Copyright (c) MIT License
+
+This module contains the classes that represent the database tables.
 It also contains methods, which are often used.
 """
 

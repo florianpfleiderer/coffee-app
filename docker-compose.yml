@@ -1,3 +1,7 @@
+# docker-compose.yml
+# Created on June 15 2023 by Florian Pfleiderer
+# Copyright (c) MIT License
+
 version: '3'
 
 services:
