@@ -1,6 +1,7 @@
 .App {
   background-color: #f2f2f2;
-  max-width: 66.67%;
+  max-width: 1200px;
+  padding: 2rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -11,44 +12,45 @@
 header {
   text-align: center;
   margin-top: 2rem;
+  margin-bottom: 3rem;
 }
 
 footer {
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
+  padding: 2rem 0;
+  margin-top: 3rem;
 }
-
-
 
 /* button section at the bottom */
 button {
-  background-color: #444;
+  background-color: #3498db;
   color: white;
   border: none;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-button:nth-of-type(1) {
-  background-color: #555;
-}
-
-button:nth-of-type(2) {
-  background-color: #666;
-}
-
-button:nth-of-type(3) {
-  background-color: #777;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
-  cursor: pointer;
-  opacity: 0.8;
+  background-color: #2980b9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Update button colors for different positions */
+button:nth-of-type(1) { background-color: #3498db; }
+button:nth-of-type(2) { background-color: #2ecc71; }
+button:nth-of-type(3) { background-color: #e74c3c; }
 
 /* Custom styles for button sizes */
 button {
@@ -104,27 +106,32 @@ button:last-of-type {
 
 /* formats for displaying the products */
 table {
-  border-collapse: collapse;
   width: 100%;
-  margin-bottom: 2rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-th,
-td {
-  text-align: left;
+th, td {
   padding: 1rem;
-  border: 1px solid #ccc;
+  text-align: left;
+  border-bottom: 1px solid #eee;
 }
 
 th {
-  background-color: #eee;
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
 }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2;
+tr:last-child td {
+  border-bottom: none;
 }
 
 tr:hover {
-  background-color: #ddd;
+  background-color: #f8f9fa;
   cursor: pointer;
 }
