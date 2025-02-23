@@ -3,16 +3,19 @@
 # Copyright (c) MIT License
 
 # Build step #1: build the React front end
-FROM node:16-alpine
+FROM node:16
+
 WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-COPY package.json package.json
-COPY yarn.lock yarn.lock
-RUN yarn install
 
-COPY ./src ./src
-COPY ./public ./public
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+ENV NODE_ENV=development
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["npm", "start"]

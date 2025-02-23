@@ -9,6 +9,7 @@ Copyright (c) MIT License
 import logging
 from flask import Flask, request, jsonify
 from .api_database import database, models
+from flask_cors import CORS
 
 
 # logger TODO: change to app.logger
@@ -17,6 +18,8 @@ FORMAT = '[%(levelname)s] %(asctime)s %(name)s: %(message)s'
 logging.basicConfig(level=LEVEL, format=FORMAT)
 
 app = Flask(__name__)
+# Enable CORS for all domains on all routes
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 models.Base.metadata.create_all(bind=database.engine)
 
 
@@ -42,17 +45,15 @@ def default():
 # my Coffee section
 @app.route('/api/coffees', methods=['POST', 'GET'])
 def add_coffee():
-    '''adds a new coffee to the inventory or returns the inventory
-    '''
+    '''adds a new coffee to the inventory or returns the inventory'''
     if request.method == 'POST':
         coffee_data = request.get_json()
         request.session.add(models.CoffeeDB.from_json(coffee_data))
         request.session.commit()
-        return 'Coffee added', 200
+        return jsonify({"message": "Coffee added successfully"}), 200
     if request.method == 'GET':
         coffees_all = request.session.query(models.CoffeeDB).all()
-        logging.debug([ob.convert_to_json() for ob in coffees_all])
-        return [ob.convert_to_json() for ob in coffees_all], 200
+        return jsonify([ob.convert_to_json() for ob in coffees_all]), 200
 
 @app.route('/api/coffees/<coffee_name>', methods=['DELETE'])
 def delete_coffee(coffee_name):
@@ -86,11 +87,10 @@ def add_grinder():
         grinder_data = request.get_json()
         request.session.add(models.GrinderDB.from_json(grinder_data))
         request.session.commit()
-        return 'Grinder added', 200
+        return jsonify({"message": "Grinder added successfully"}), 200
     elif request.method == 'GET':
         grinders_all = request.session.query(models.GrinderDB).all()
-        logging.debug([ob.convert_to_json() for ob in grinders_all])
-        return [ob.convert_to_json() for ob in grinders_all], 200
+        return jsonify([ob.convert_to_json() for ob in grinders_all]), 200
 
 
 @app.route('/api/grinders/<grinder_name>', methods=['DELETE'])
@@ -123,11 +123,10 @@ def add_recipe():
         recipe_data = request.get_json()
         request.session.add(models.RecipeDB.from_json(recipe_data))
         request.session.commit()
-        return 'Recipe added', 200
+        return jsonify({"message": "Recipe added successfully"}), 200
     elif request.method == 'GET':
         recipes_all = request.session.query(models.RecipeDB).all()
-        logging.debug([ob.convert_to_json() for ob in recipes_all])
-        return [ob.convert_to_json() for ob in recipes_all], 200
+        return jsonify([ob.convert_to_json() for ob in recipes_all]), 200
 
 @app.route('/api/recipes/<recipe_name>', methods=['DELETE'])
 def delete_recipe(recipe_name):
@@ -164,3 +163,6 @@ def update_recipe(recipe_name):
     request.session.commit()
     # inventory[coffee_index] = inventory_objects.Coffee.from_json(newCoffee)
     return jsonify({"message": "Recipe updated successfully."}), 200
+
+if __name__ == '__main__':
+    app.run(host='localhost', port=8000)

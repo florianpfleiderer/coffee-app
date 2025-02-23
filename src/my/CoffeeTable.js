@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddCoffeeForm from './AddCoffeeForm'
 import EditDialog from './EditDialog';
+import SectionHeader from '../components/SectionHeader';
 import './CoffeeTable.css'
+import LogBook from './LogBook';
+import LogBookPage from './LogBookPage';
 
 function CoffeeTable() {
     const [inventory, setInventory] = useState([]);
@@ -12,6 +15,7 @@ function CoffeeTable() {
     const [selectedCoffee, setSelectedCoffee] = useState(null);
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [editAttribute, setEditAttribute] = useState('');
+    const [showLogBook, setShowLogBook] = useState(false);
 
     useEffect(() => {
         axios.get('/api/coffees')
@@ -105,99 +109,130 @@ function CoffeeTable() {
     // render all the stuff
     const renderTable = () => {
         return (
-            // render the coffee table here
-            // add an onClick event handler to each row
-            // call handleRowClick with the clicked coffee object
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Farmer</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div className="coffee-section">
+                <SectionHeader 
+                    title="My Coffee Collection"
+                    subtitle="Manage your coffee inventory"
+                    action={
+                        <div className="header-actions">
+                            <button className="secondary-button" onClick={() => setShowLogBook(true)}>
+                                <i className="fas fa-book"></i>
+                                Brewing Journal
+                            </button>
+                            <button className="action-button" onClick={handleAddCoffee}>
+                                <i className="fas fa-plus"></i>
+                                Add Coffee
+                            </button>
+                        </div>
+                    }
+                />
+                
+                <div className="card-grid">
                     {inventory.map((coffee) => (
-                        <tr key={coffee.name} onClick={() => handleRowClick(coffee)}>
-                            <td>{coffee.name}</td>
-                            <td>{coffee.price}</td>
-                            <td>{coffee.farmer}</td>
-                        </tr>
+                        <div 
+                            key={coffee.name} 
+                            className="coffee-card card" 
+                            onClick={() => handleRowClick(coffee)}
+                        >
+                            <h3>{coffee.name}</h3>
+                            <div className="coffee-card-details">
+                                <div className="detail-item">
+                                    <span className="label">Price</span>
+                                    <span className="value">${coffee.price}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <span className="label">Farmer</span>
+                                    <span className="value">{coffee.farmer}</span>
+                                </div>
+                            </div>
+                        </div>
                     ))}
-                </tbody>
-            </table>
+                </div>
+            </div>
         );
     };
 
-    const renderDetail = (selectedCoffee) => {
-        if (!selectedCoffee) {
+    const renderDetail = (coffee) => {
+        if (!coffee) {
             return null;
         }
 
-        // render the detailed information for the selected coffee here
-        // use the selectedCoffee state variable to get the coffee object
         return (
-            <table>
-                <tbody>
-                    <tr key={selectedCoffee.name} onClick={() => handleEditClick('name')}>
-                        <th>Name:</th>
-                        <td>{selectedCoffee.name}</td>
-                    </tr>
-                    <tr key={selectedCoffee.origin} onClick={() => handleEditClick('origin')}>
-                        <th>Origin:</th>
-                        <td>{selectedCoffee.origin}</td>
-                    </tr>
-                    <tr key={selectedCoffee.variety} onClick={() => handleEditClick('variety')}>
-                        <th>Variety:</th>
-                        <td>{selectedCoffee.variety}</td>
-                    </tr>
-                    <tr key={selectedCoffee.process} onClick={() => handleEditClick('process')}>
-                        <th>Process:</th>
-                        <td>{selectedCoffee.process}</td>
-                    </tr>
-                    <tr key={selectedCoffee.roast} onClick={() => handleEditClick('roast')}>
-                        <th>Roast:</th>
-                        <td>{selectedCoffee.roast}</td>
-                    </tr>
-                    <tr key={selectedCoffee.farmer} onClick={() => handleEditClick('farmer')}>
-                        <th>Farmer:</th>
-                        <td>{selectedCoffee.farmer}</td>
-                    </tr>
-                    <tr key={selectedCoffee.size} onClick={() => handleEditClick('size')}>
-                        <th>Size:</th>
-                        <td>{selectedCoffee.size}</td>
-                    </tr>
-                    <tr key={selectedCoffee.price} onClick={() => handleEditClick('price')}>
-                        <th>Price:</th>
-                        <td>{selectedCoffee.price}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Name:</th>
+                            <td onClick={() => handleEditClick('name')}>{coffee.name}</td>
+                        </tr>
+                        <tr>
+                            <th>Origin:</th>
+                            <td onClick={() => handleEditClick('origin')}>{coffee.origin}</td>
+                        </tr>
+                        <tr>
+                            <th>Variety:</th>
+                            <td onClick={() => handleEditClick('variety')}>{coffee.variety}</td>
+                        </tr>
+                        <tr>
+                            <th>Process:</th>
+                            <td onClick={() => handleEditClick('process')}>{coffee.process}</td>
+                        </tr>
+                        <tr>
+                            <th>Roast:</th>
+                            <td onClick={() => handleEditClick('roast')}>{coffee.roast}</td>
+                        </tr>
+                        <tr>
+                            <th>Farmer:</th>
+                            <td onClick={() => handleEditClick('farmer')}>{coffee.farmer}</td>
+                        </tr>
+                        <tr>
+                            <th>Size:</th>
+                            <td onClick={() => handleEditClick('size')}>{coffee.size}</td>
+                        </tr>
+                        <tr>
+                            <th>Price:</th>
+                            <td onClick={() => handleEditClick('price')}>{coffee.price}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <LogBook coffee={coffee} />
+            </div>
         );
     };
 
     const renderContent = () => {
-        if (showTable) {
-            return (
-                <div>
-                    {renderTable()}
-                    <button class="button1" onClick={handleAddCoffee}>Add Coffee</button>
-                </div>
-            )
+        if (showLogBook) {
+            return <LogBookPage onBack={() => setShowLogBook(false)} />;
+        } else if (showTable) {
+            return renderTable();
         } else if (showDetail) {
             if (showEditDialog) {
                 return (
                     <div>
                         {showEditDialog && <EditDialog coffee={selectedCoffee} attribute={editAttribute} />}
-                        <button class="back" onClick={handleCloseEditDialog}><span>Back</span></button>
+                        <div className="button-container">
+                            <button className="back-button" onClick={handleCloseEditDialog}>
+                                <i className="fas fa-arrow-left"></i>
+                                Back
+                            </button>
+                        </div>
                     </div>
                 );
             } else {
                 return (
                     <div>
                         {renderDetail(selectedCoffee)}
-                        <button class="button1" onClick={handleDelete}>Delete</button>
-                        <button class="back" onClick={handleBackClick}><span>Back</span></button>
+                        <div className="button-container">
+                            <button className="delete-button" onClick={handleDelete}>
+                                <i className="fas fa-trash"></i>
+                                Delete
+                            </button>
+                            <button className="back-button" onClick={handleBackClick}>
+                                <i className="fas fa-arrow-left"></i>
+                                Back
+                            </button>
+                        </div>
                     </div>
                 );
             }

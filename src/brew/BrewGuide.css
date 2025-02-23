@@ -1,0 +1,95 @@
+.brew-guide {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.brew-header {
+  margin-bottom: 30px;
+}
+
+.recipe-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.detail-item {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.timer-section {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.timer-display {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.timer-controls button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background: #3498db;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.timer-controls button:hover {
+  background: #2980b9;
+}
+
+.steps-section {
+  margin-top: 30px;
+}
+
+.step-item {
+  display: flex;
+  gap: 20px;
+  padding: 15px;
+  border-left: 3px solid #ddd;
+  margin-bottom: 10px;
+  transition: all 0.3s;
+}
+
+.step-item.active {
+  border-left-color: #3498db;
+  background: #f8f9fa;
+}
+
+.step-item.completed {
+  border-left-color: #2ecc71;
+}
+
+.step-time {
+  font-weight: bold;
+  min-width: 60px;
+}
+
+.step-content h4 {
+  margin: 0 0 5px 0;
+}
+
+.step-content p {
+  margin: 0;
+  color: #666;
+} 

@@ -38,3 +38,326 @@ buttonRow {
     display: flex;
     justify-content: space-evenly;
 }
+
+.brew-guide-container {
+    height: calc(100vh - 100px); /* Adjust based on your header/footer */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.brew-guide-layout {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 30px;
+    height: 100%;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.recipe-header {
+    text-align: center;
+}
+
+.recipe-header h2 {
+    font-size: 2em;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.recipe-quick-stats {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.timer-display {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.time {
+    font-size: 6em;
+    font-weight: 700;
+    color: #2c3e50;
+    font-family: 'Roboto Mono', monospace;
+    line-height: 1;
+}
+
+.progress-bar {
+    height: 6px;
+    background: #f1f3f5;
+    border-radius: 3px;
+    margin-top: 15px;
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(to right, #3498db, #2ecc71);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.brew-controls {
+    margin-top: auto;
+}
+
+.primary-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.control-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.right-column {
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.brew-steps {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.brew-step {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-left: 3px solid #ddd;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+}
+
+.brew-step.active {
+    border-left-color: #3498db;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.brew-status {
+    margin-top: auto;
+    text-align: center;
+}
+
+.status-message {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    animation: slideIn 0.4s ease-out;
+}
+
+.status-message.alert {
+    background: #ffeeba;
+    color: #856404;
+}
+
+.status-message.complete {
+    background: #d4edda;
+    color: #155724;
+}
+
+.brew-steps {
+    margin: 30px 0;
+}
+
+.step-time {
+    font-weight: bold;
+    min-width: 60px;
+    color: #6c757d;
+}
+
+.step-content h4 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+}
+
+.step-content p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.brew-controls {
+    margin-top: 40px;
+}
+
+.primary-controls, .secondary-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.control-btn i {
+    font-size: 1.1em;
+}
+
+.control-btn.start {
+    background: #2ecc71;
+    color: white;
+}
+
+.control-btn.pause {
+    background: #f1c40f;
+    color: white;
+}
+
+.control-btn.reset {
+    background: #e74c3c;
+    color: white;
+}
+
+.control-btn.back {
+    background: #95a5a6;
+    color: white;
+}
+
+.control-btn.save {
+    background: #3498db;
+    color: white;
+}
+
+.control-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.brew-step,
+.stat-item,
+.control-btn,
+.status-message {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.recipe-section {
+    padding: 2rem;
+}
+
+.recipe-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.recipe-card h3 {
+    margin: 0 0 1rem;
+    color: #2c3e50;
+    font-size: 1.2rem;
+}
+
+.recipe-card-details {
+    flex: 1;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.detail-row .label {
+    color: #6c757d;
+}
+
+.detail-row .value {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.recipe-card-footer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+/* Update primary button styles */
+.primary-button {
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    min-width: 180px;
+}
+
+.primary-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.primary-button i {
+    font-size: 1rem;
+}
+
+/* Back button styling */
+.back-button {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    border: 1px solid #e0e0e0;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.back-button:hover {
+    background-color: #e9ecef;
+    border-color: #2c3e50;
+}
+
+/* Remove old button styles */
+.button1, .back {
+    display: none;
+}

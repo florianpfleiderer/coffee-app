@@ -5,7 +5,7 @@ Created on March 15 2023 by Florian Pfleiderer
 Copyright (c) MIT License
 """
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -126,6 +126,9 @@ class RecipeDB(Base, InventoryObject):
         temp (int): the temperature of the water used in the brew recipe
         coffee_id (int): the id of the coffee used in the brew recipe
         grinder_id (int): the id of the grinder used in the brew recipe
+        method (str): the method used for brewing
+        grind_size (str): the grind size used for brewing
+        steps (JSON): the steps of the brewing process
        
         
     '''
@@ -140,6 +143,9 @@ class RecipeDB(Base, InventoryObject):
     temp = Column(Integer, nullable=True)
     coffee_id = Column(Integer, ForeignKey('coffees.id'), nullable=False)
     grinder_id = Column(Integer, ForeignKey('grinders.id'), nullable=False)
+    method = Column(String, nullable=False)
+    grind_size = Column(String, nullable=False)
+    steps = Column(JSON, nullable=False)
     coffee = relationship('CoffeeDB', back_populates='brew_recipes')
     grinder = relationship('GrinderDB', back_populates='brew_recipes')
 
@@ -160,6 +166,8 @@ class RecipeDB(Base, InventoryObject):
             'temp': self.temp,
             'totalTime': self.totalTime,
             'time1': self.time1,
-            'time2': self.time2
-
+            'time2': self.time2,
+            'method': self.method,
+            'grind_size': self.grind_size,
+            'steps': self.steps
         }

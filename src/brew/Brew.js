@@ -3,6 +3,7 @@ import axios from 'axios';
 // import { render } from '@testing-library/react';
 import AddRecipeForm from './AddRecipeForm';
 import './Brew.css';
+import SectionHeader from '../components/SectionHeader';
 
 function Brew() {
     const [inventoryGrinders, setInventoryGrinders] = useState([]);
@@ -403,41 +404,47 @@ function Brew() {
     // render recipe selection
     const renderRecipeSelection = () => {
         return (
-            
-            // render the grinder table here
-            // add an onClick event handler to each row
-            // call handleRowClick with the clicked coffee object
-            <div className="RecipeSelection">
-                <header>
-                    <h2>Choose Recipe:</h2>
-                </header>
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Grinder</th>
-                            <th>Coffee</th>
-                            <th>Ratio</th>
-                            <th>Water</th>
-                            <th>Total Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        {inventoryRecipes.map((recipe) => (
-                            <tr key={recipe.name} onClick={() => handleRecipeRowClick(recipe)}>
-                                <td>{recipe.name}</td>
-                                <td>{recipe.grinder}</td>
-                                <td>{recipe.coffee}</td>
-                                <td>1:{recipe.water / recipe.coffee_In}</td>
-                                <td>{recipe.water}</td>
-                                <td>{recipe.totalTime}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <button class="button1" onClick={handleAddRecipe}>Add Recipe</button>
+            <div className="recipe-section">
+                <SectionHeader 
+                    title="Brewing Recipes"
+                    subtitle="Select a recipe to start brewing"
+                    action={
+                        <button className="primary-button" onClick={handleAddRecipe}>
+                            <i className="fas fa-plus"></i>
+                            Add Recipe
+                        </button>
+                    }
+                />
+                
+                <div className="card-grid">
+                    {inventoryRecipes.map((recipe) => (
+                        <div 
+                            key={recipe.name} 
+                            className="recipe-card card" 
+                            onClick={() => handleRecipeRowClick(recipe)}
+                        >
+                            <h3>{recipe.name}</h3>
+                            <div className="recipe-card-details">
+                                <div className="detail-row">
+                                    <span className="label">Coffee</span>
+                                    <span className="value">{recipe.coffee}</span>
+                                </div>
+                                <div className="detail-row">
+                                    <span className="label">Grinder</span>
+                                    <span className="value">{recipe.grinder}</span>
+                                </div>
+                                <div className="detail-row">
+                                    <span className="label">Ratio</span>
+                                    <span className="value">1:{Math.round(recipe.water / recipe.coffee_In)}</span>
+                                </div>
+                            </div>
+                            <div className="recipe-card-footer">
+                                <span className="time">{recipe.totalTime}s</span>
+                                <span className="water">{recipe.water}g</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     };
@@ -446,162 +453,81 @@ function Brew() {
     //lets me choose a cooffee, grinder
     const renderBrewGuide = () => {
         return (
-          <div className="BrewGuide">
-            <header>
-              <h2>Brew Guide:</h2>
-            </header>
+            <div className="brew-guide-container">
+                <div className="brew-guide-layout">
+                    {/* Left Column - Recipe Info & Controls */}
+                    <div className="left-column">
+                        <div className="recipe-header">
+                            <h2>{selectedRecipe.name}</h2>
+                            <div className="recipe-quick-stats">
+                                <span>{selectedCoffee.name}</span>
+                                <span>•</span>
+                                <span>1:{Math.round(selectedRecipe.water / selectedRecipe.coffee_In)}</span>
+                            </div>
+                        </div>
 
-            <table>
-                <tbody>
-                    <tr key={selectedRecipe.name}>
-                        <th>Name:</th>
-                        <td>
-                            <form onSubmit={handleNameSubmit}>
-                                <label>
-                                <input
-                                    type="text"
-                                    value={recipeNameInput}
-                                    onChange={(e) => setRecipeNameInput(e.target.value)}
-                                />
-                                </label>
-                                <input type="submit" value="Update" />
-                            </form>
-                        </td>
-                    </tr>
+                        <div className="timer-display">
+                            <div className="time">{minutes}:{seconds < 10 ? '0' : ''}{seconds}</div>
+                            <div className="progress-bar">
+                                <div className="progress" style={{width: `${(time / totalTime) * 100}%`}}/>
+                            </div>
+                        </div>
 
-                    <tr key={selectedGrinder.name} onClick={() => handleEditClick('grinder')}>
-                        <th>Grinder:</th>
-                        <td>{selectedGrinder.name}</td>
-                    </tr>
-                    <tr key={selectedCoffee.name} onClick={() => handleEditClick('coffee')}>
-                        <th>Coffee:</th>
-                        <td>{selectedCoffee.name}</td>
-                    </tr>
-                    <tr>
-                        <th>Ratio:</th>
-                        <td>1:{selectedRecipe.water / selectedRecipe.coffee_In}</td>
-                    </tr>
-                    <tr key={selectedRecipe.water}>
-                        <th>Water:</th>
-                        <td>
-                            <form onSubmit={handleWaterSubmit}>
-                                <label>
-                                <input
-                                    type="text"
-                                    value={waterInput}
-                                    onChange={(e) => setWaterInput(e.target.value)}
-                                />
-                                </label>
-                                <input type="submit" value="Update" />
-                            </form>
-                        </td>
-                    </tr>
-                    <tr key={selectedRecipe.coffee_In}>
-                        <th>Coffee in g:</th>
-                        <td>
-                            <form onSubmit={handleCoffeeInSubmit}>
-                                <label>
-                                <input
-                                    type="text"
-                                    value={coffeeInInput}
-                                    onChange={(e) => setCoffeeInInput(e.target.value)}
-                                />
-                                </label>
-                                <input type="submit" value="Update" />
-                            </form>
-                        </td>
-                    </tr>
-                    <tr key={selectedRecipe.temp}>
-                        <th>Temperature in C:</th>
-                        <td>
-                            <form onSubmit={handleTempSubmit}>
-                                <label>
-                                <input
-                                    type="text"
-                                    value={tempInput}
-                                    onChange={(e) => setTempInput(e.target.value)}
-                                />
-                                </label>
-                                <input type="submit" value="Update" />
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Total time:</th>
-                        <td>
-                            <form onSubmit={handletotalTimeSubmit}>
-                                <label>
-                                <input
-                                    type="text"
-                                    value={totalTimeInput}
-                                    onChange={(e) => setTotalTimeInput(e.target.value)}
-                                />
-                                </label>
-                                <input type="submit" value="Update" />
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>1st Pour:</th>
-                        <td>
-                            <form onSubmit={handleTime1Submit}>
-                                <label>
-                                <input
-                                    type="text"
-                                    value={time1Input}
-                                    onChange={(e) => setTime1Input(e.target.value)}
-                                />
-                                </label>
-                                <input type="submit" value="Update" />
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>2nd Pour:</th>
-                        <td>
-                            <form onSubmit={handleTime2Submit}>
-                                <label>
-                                <input
-                                    type="text"
-                                    value={time2Input}
-                                    onChange={(e) => setTime2Input(e.target.value)}
-                                />
-                                </label>
-                                <input type="submit" value="Update" />
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div>
-              <div className="Timer">
-                <div className="TimerRow">
-                  <div></div>
-                  <div className="TimerItem">
-                    <h1 style={{ fontSize: '40px' }}>
-                      {minutes}:{seconds < 10 ? '0' : ''}{seconds}
-                    </h1>
-                    {isTimeUp && <p>Enjoy your coffee!</p>}
-                    {isTime1up && <p>End of 1st Pour</p>}
-                    {isTime2up && <p>End of 2nd Pour</p>}
-                  </div>
+                        <div className="brew-controls">
+                            <div className="primary-controls">
+                                {!isRunning ? (
+                                    <button className="control-btn start" onClick={handleStart}>
+                                        <i className="fas fa-play"></i>
+                                    </button>
+                                ) : (
+                                    <button className="control-btn pause" onClick={handleStop}>
+                                        <i className="fas fa-pause"></i>
+                                    </button>
+                                )}
+                                <button className="control-btn reset" onClick={handleReset}>
+                                    <i className="fas fa-redo"></i>
+                                </button>
+                                <button className="control-btn back" onClick={handleBackClick}>
+                                    <i className="fas fa-arrow-left"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Column - Brew Steps */}
+                    <div className="right-column">
+                        <div className="brew-steps">
+                            {selectedRecipe.steps.map((step, index) => (
+                                <div 
+                                    key={index}
+                                    className={`brew-step ${
+                                        time >= step.time && time < (selectedRecipe.steps[index + 1]?.time || totalTime) 
+                                            ? 'active' 
+                                            : time >= (selectedRecipe.steps[index + 1]?.time || totalTime) 
+                                                ? 'completed' 
+                                                : ''
+                                    }`}
+                                >
+                                    <div className="step-time">{Math.floor(step.time / 60)}:{(step.time % 60).toString().padStart(2, '0')}</div>
+                                    <div className="step-content">
+                                        <h4>{step.action}</h4>
+                                        <p>{step.details}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Status Messages */}
+                        <div className="brew-status">
+                            {isTimeUp && <div className="status-message complete">Enjoy your coffee!</div>}
+                            {isTime1up && <div className="status-message alert">First Pour Complete</div>}
+                            {isTime2up && <div className="status-message alert">Second Pour Complete</div>}
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-            <div className="TimerButtons">
-              <buttonRow>
-                <brewButton onClick={handleStart}>Start</brewButton>
-                <brewButton onClick={handleStop}>Stop</brewButton>
-                <brewButton onClick={handleReset}>Reset</brewButton>
-              </buttonRow>
-              <buttonRow>
-                <brewButton onClick={handleBackClick}>Back</brewButton>
-                <brewButton onClick={handleSubmit}>Save</brewButton>
-              </buttonRow>
-            </div>
-          </div>
         );
-      };
+    };
 
 
 
@@ -618,9 +544,12 @@ function Brew() {
             return renderBrewGuide();
         } else if (showForm) {
             return (
-                <div>
+                <div className="button-container">
                     {showForm && <AddRecipeForm />}
-                    <button class="back" onClick={handleBackClick}><span>Back</span></button>
+                    <button className="back-button" onClick={handleBackClick}>
+                        <i className="fas fa-arrow-left"></i>
+                        Back
+                    </button>
                 </div>
             );
         }
