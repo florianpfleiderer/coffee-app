@@ -27,7 +27,9 @@ services:
       retries: 3
 
   frontend:
-    build: .
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: frontend
     ports:
       - "3000:3000"
