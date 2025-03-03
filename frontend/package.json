@@ -23,7 +23,9 @@
     "start-api": "cd api && venv/bin/flask run --no-debugger",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "wrangler pages dev --local .",
+    "deploy": "npm run build && wrangler pages publish ."
   },
   "eslintConfig": {
     "extends": [
@@ -43,5 +45,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://api:8000"
+  "proxy": "http://localhost:8787",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
 }

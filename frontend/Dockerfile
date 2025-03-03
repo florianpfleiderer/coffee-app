@@ -3,7 +3,7 @@
 # Copyright (c) MIT License
 
 # Build step #1: build the React front end
-FROM node:16
+FROM node:18
 
 WORKDIR /app
 
