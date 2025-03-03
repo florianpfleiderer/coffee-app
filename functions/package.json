@@ -1,0 +1,16 @@
+{
+  "name": "coffee-app-functions",
+  "version": "1.0.0",
+  "description": "Cloudflare Workers functions for Coffee App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20240311.0",
+    "itty-router": "^4.0.23"
+  },
+  "devDependencies": {
+    "wrangler": "^3.22.1"
+  }
+} 
