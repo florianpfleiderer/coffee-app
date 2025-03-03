@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import AddCoffeeForm from './AddCoffeeForm'
 import EditDialog from './EditDialog';
 import SectionHeader from '../components/SectionHeader';
@@ -18,12 +19,13 @@ function CoffeeTable() {
     const [showLogBook, setShowLogBook] = useState(false);
 
     useEffect(() => {
-        axios.get('/api/coffees')
+        axios.get(`${API_BASE_URL}/api/coffees`)
             .then(response => {
                 setInventory(response.data);
             })
             .catch(error => {
-                console.error(error);
+                console.error('Error fetching coffees:', error);
+                // Add user-facing error notification here
             });
     }, []);
 
@@ -48,12 +50,13 @@ function CoffeeTable() {
 
     // closing windows / back clicks
     const handleBackClick = () => {
-        axios.get('/api/coffees')
+        axios.get(`${API_BASE_URL}/api/coffees`)
             .then(response => {
                 setInventory(response.data);
             })
             .catch(error => {
-                console.error(error);
+                console.error('Error fetching coffees:', error);
+                // Add user-facing error notification here
             });
         setSelectedCoffee(null);
         setShowDetail(false);
@@ -61,12 +64,13 @@ function CoffeeTable() {
     };
 
     const handleCloseEditDialog = () => {
-        axios.get('/api/coffees')
+        axios.get(`${API_BASE_URL}/api/coffees`)
             .then(response => {
                 setInventory(response.data);
             })
             .catch(error => {
-                console.error(error);
+                console.error('Error fetching coffees:', error);
+                // Add user-facing error notification here
             });
         setShowEditDialog(false);
         setSelectedCoffee(null);
@@ -76,7 +80,7 @@ function CoffeeTable() {
 
     const handleDelete = () => {
         // Send DELETE request to API to delete selected coffee
-        fetch(`/api/coffees/${selectedCoffee.name}`, { method: "DELETE" })
+        fetch(`${API_BASE_URL}/api/coffees/${selectedCoffee.name}`, { method: "DELETE" })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Failed to delete coffee.");
@@ -94,12 +98,13 @@ function CoffeeTable() {
                 console.error(error);
                 alert("Failed to delete coffee.");
             });
-        axios.get('/api/coffees')
+        axios.get(`${API_BASE_URL}/api/coffees`)
             .then(response => {
                 setInventory(response.data);
             })
             .catch(error => {
-                console.error(error);
+                console.error('Error fetching coffees:', error);
+                // Add user-facing error notification here
             });
         setSelectedCoffee(null);
         setShowDetail(false);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 // import Brew from './Brew';
 
 
@@ -18,15 +19,16 @@ function AddRecipeForm(props) {
                 throw new Error("Failed to add Recipe - fill out all the boxes.");
             }
             const recipe = {name, water, coffee_In, totalTime, grinder_id, coffee_id};
-            axios.post('/api/recipes', recipe)
+            axios.post(`${API_BASE_URL}/api/recipes`, recipe)
                 .then(response => {
-                    if (!response.ok) {
+                    if (!response.data) {
                         throw new Error('Network response was not ok');
                     }
                     props.onAddRecipe();
                 })
                 .catch(error => {
-                console.error(error);
+                    console.error('Error adding recipe:', error);
+                    alert("Failed to add Recipe. Please try again.");
                 });
             setName('');
             setWater('');

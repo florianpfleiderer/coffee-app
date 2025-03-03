@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 // import { render } from '@testing-library/react';
 import AddRecipeForm from './AddRecipeForm';
 import './Brew.css';
@@ -39,12 +40,13 @@ function Brew() {
 
     const fetchGrinders = () => {
         axios
-          .get('/api/grinders')
+          .get(`${API_BASE_URL}/api/grinders`)
           .then((response) => {
             setInventoryGrinders(response.data);
           })
           .catch((error) => {
-            console.error(error);
+            console.error('Error fetching grinders:', error);
+            // Consider adding user-visible error notification
           });
       };
       
@@ -54,12 +56,13 @@ function Brew() {
 
       const fetchCoffees = () => {
         axios
-          .get('/api/coffees')
+          .get(`${API_BASE_URL}/api/coffees`)
           .then((response) => {
             setInventoryCoffees(response.data);
           })
           .catch((error) => {
-            console.error(error);
+            console.error('Error fetching coffees:', error);
+            // Consider adding user-visible error notification
           });
       };
       
@@ -69,12 +72,13 @@ function Brew() {
 
       const fetchRecipes = () => {
         axios
-          .get('/api/recipes')
+          .get(`${API_BASE_URL}/api/recipes`)
           .then((response) => {
             setInventoryRecipes(response.data);
           })
           .catch((error) => {
-            console.error(error);
+            console.error('Error fetching recipes:', error);
+            // Consider adding user-visible error notification
           });
       };
       
@@ -87,21 +91,29 @@ function Brew() {
 
     //finds grinder by name
     const find_grinder_by_name = (name) => {
-        fetchGrinders();
+        if (!inventoryGrinders || inventoryGrinders.length === 0) {
+            console.error('No grinders available');
+            return null;
+        }
         for (let i = 0; i < inventoryGrinders.length; i++) {
             if (inventoryGrinders[i].name === name) {
                 return inventoryGrinders[i];
             }
         }
+        return null;
     }
 
     const find_coffee_by_name = (name) => {
-        fetchCoffees();
+        if (!inventoryCoffees || inventoryCoffees.length === 0) {
+            console.error('No coffees available');
+            return null;
+        }
         for (let i = 0; i < inventoryCoffees.length; i++) {
             if (inventoryCoffees[i].name === name) {
                 return inventoryCoffees[i];
             }
         }
+        return null;
     }
 
 
@@ -217,6 +229,12 @@ function Brew() {
 
       const handleSubmit = () => {
         // e.preventDefault();
+        // Check if required objects exist
+        if (!selectedRecipe || !selectedGrinder || !selectedCoffee) {
+            console.error('Missing required recipe, grinder or coffee');
+            return;
+        }
+        
         const updatedRecipe = {
             name: recipeNameInput,
             water: waterInput,
@@ -227,14 +245,15 @@ function Brew() {
             time2: time2Input,
             grinder_id: selectedGrinder.name,
             coffee_id: selectedCoffee.name,
-
         };
-        axios.put(`/api/recipes/${selectedRecipe.name}`, updatedRecipe)
+        
+        axios.put(`${API_BASE_URL}/api/recipes/${selectedRecipe.name}`, updatedRecipe)
         .then((response) => {
             fetchRecipes();
         })
         .catch((error) => {
-            console.error(error);
+            console.error('Error updating recipe:', error);
+            // Consider adding user-visible error notification
         });
     };
 

@@ -3,6 +3,10 @@
 
 echo "=== Starting deployment process ==="
 
+# Activate conda environment where Wrangler is installed
+source $(conda info --base)/etc/profile.d/conda.sh
+conda activate nodejs
+
 # Step 1: Build the frontend
 echo "Building frontend..."
 cd frontend
@@ -12,7 +16,9 @@ cd ..
 
 # Step 2: Deploy only the frontend build to Cloudflare Pages
 echo "Deploying frontend to Cloudflare Pages..."
-wrangler pages deploy frontend/build --project-name=coffee-app
+cd frontend
+wrangler pages deploy build --project-name=coffee-app --commit-message="Deploy from script" --commit-dirty=true
+cd ..
 
 # Step 3: Deploy the functions separately
 echo "Deploying functions to Cloudflare Workers..."
@@ -168,11 +174,10 @@ cat > wrangler.toml << 'EOL'
 name = "coffee-app-api"
 main = "worker.js"
 compatibility_date = "2023-05-18"
-EOL
 
 # Deploy the worker
 echo "Deploying worker to Cloudflare..."
-wrangler deploy --name=coffee-app-api --commit-dirty=true
+wrangler deploy --name=coffee-app-api
 
 cd ..
 
