@@ -24,6 +24,7 @@ function AddRecipeForm(props) {
                     if (!response.data) {
                         throw new Error('Network response was not ok');
                     }
+                    console.log('Recipe added successfully:', response.data);
                     props.onAddRecipe();
                 })
                 .catch(error => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import './LogBookPage.css';
 import SectionHeader from '../components/SectionHeader';
 
@@ -10,12 +11,12 @@ function LogBookPage({ onBack }) {
 
   useEffect(() => {
     // Fetch coffees for the filter
-    axios.get('/api/coffees')
+    axios.get(`${API_BASE_URL}/api/coffees`)
       .then(response => {
         setCoffees(response.data);
       })
       .catch(error => {
-        console.error(error);
+        console.error('Error fetching coffees for log book:', error);
       });
 
     // TODO: Replace with actual API call when implemented

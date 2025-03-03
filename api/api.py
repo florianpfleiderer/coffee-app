@@ -164,5 +164,35 @@ def update_recipe(recipe_name):
     # inventory[coffee_index] = inventory_objects.Coffee.from_json(newCoffee)
     return jsonify({"message": "Recipe updated successfully."}), 200
 
+@app.route('/api/coffee-news', methods=['GET'])
+def get_coffee_news():
+    '''returns mock coffee news data'''
+    # This endpoint provides static mock coffee news data
+    # In a production environment, this could fetch from a real news API or database
+    mock_news = [
+        {
+            "title": "The Rise of Specialty Coffee in Home Brewing",
+            "description": "How consumers are bringing cafe-quality coffee experiences to their homes with new brewing techniques and equipment.",
+            "urlToImage": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
+            "publishedAt": "2023-11-30T12:00:00Z",
+            "url": "https://example.com/coffee-article-1"
+        },
+        {
+            "title": "Sustainable Coffee Farming Practices Gaining Momentum",
+            "description": "Coffee farmers around the world are adopting more sustainable practices to combat climate change and improve bean quality.",
+            "urlToImage": "https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb",
+            "publishedAt": "2023-11-29T10:30:00Z",
+            "url": "https://example.com/coffee-article-2"
+        },
+        {
+            "title": "Barista Championships Showcase Innovation in Coffee Preparation",
+            "description": "The World Barista Championship is highlighting new trends in coffee preparation methods and flavor profiles.",
+            "urlToImage": "https://images.unsplash.com/photo-1513162613623-336aa0d8aff7",
+            "publishedAt": "2023-11-28T09:15:00Z",
+            "url": "https://example.com/coffee-article-3"
+        }
+    ]
+    return jsonify(mock_news), 200
+
 if __name__ == '__main__':
     app.run(host='localhost', port=8000)

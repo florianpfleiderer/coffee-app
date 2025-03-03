@@ -111,6 +111,20 @@ function CoffeeTable() {
         setShowTable(true);
     };
 
+    // Add a handler for when a coffee is added successfully
+    const handleCoffeeAdded = () => {
+        console.log("Coffee added, refreshing list...");
+        axios.get(`${API_BASE_URL}/api/coffees`)
+            .then(response => {
+                setInventory(response.data);
+                setShowForm(false);
+                setShowTable(true);
+            })
+            .catch(error => {
+                console.error('Error fetching coffees after add:', error);
+            });
+    };
+
     // render all the stuff
     const renderTable = () => {
         return (
@@ -244,7 +258,7 @@ function CoffeeTable() {
         } else if (showForm) {
             return (
                 <div>
-                    {showForm && <AddCoffeeForm />}
+                    {showForm && <AddCoffeeForm onAddCoffee={handleCoffeeAdded} />}
                     <button class="back" onClick={handleBackClick}><span>Back</span></button>
                 </div>
             );
