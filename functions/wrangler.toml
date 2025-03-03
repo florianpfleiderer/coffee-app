@@ -2,12 +2,11 @@ name = "coffee-app-api"
 main = "worker.js"
 compatibility_date = "2023-05-18"
 
-# Deploy the worker
-echo "Deploying worker to Cloudflare..."
-wrangler deploy --name=coffee-app-api
+# Configure KV namespaces for persistent storage
+[[kv_namespaces]]
+binding = "COFFEE_DB"
+id = "create-this-in-cloudflare-dashboard" # Replace with actual ID from Cloudflare Dashboard
 
-cd ..
-
-echo "=== Deployment complete ==="
-echo "Your application is now deployed to Cloudflare!"
-echo "Note: You may need to update your frontend to point to the Worker URL for API requests." 
+# Allow CORS for your frontend domain
+[vars]
+ALLOWED_ORIGIN = "https://coffee-app.pages.dev" # Replace with your actual frontend URL
